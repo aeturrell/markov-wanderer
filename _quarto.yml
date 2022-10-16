@@ -21,6 +21,7 @@ website:
       - about.qmd
       # - archive.qmd
 google-analytics:
+  tracking-id: "G-46P0B31B3F"
 format:
   html:
     theme: flatly
