@@ -2,15 +2,16 @@
 date: "2018-08-18"
 layout: post
 title: Who is not participating in Higher Education?
+categories: [outreach, data]
 ---
 
 Given my work in both economics and Science, Technology, Engineering, and Mathematics (STEM), I've become interested in what factors determine groups' participation in higher education, what groups are being left out, and what might be done about it.
 
-
 ## Poverty means low participation
+
 According to a [Social Mobility Commission](https://cdn.lkmco.org/wp-content/uploads/2016/12/Ethnicity-gender-and-social-mobility-Shaw-et-al.-2016.pdf) report from 2016, the most important determinant of whether someone goes to university at all or not is poverty, or, more precisely, whether someone receives free school meals. This applies across gender and ethnicity, though as the report notes "Disadvantaged young people from White British backgrounds are the least likely to access Higher Education". 
 
-A lack of diversity in socio-economic background is perhaps less visible than some other troubling aspects of participation. But, if diversity matters at all, all dimensions of diversity matter. 
+A lack of diversity in socio-economic background is perhaps less visible than some other troubling aspects of participation. But, if diversity matters at all, all dimensions of diversity matter.
 
 Unfortunately, people from lower income/wealth backgrounds are some of the most difficult to influence with outreach campaigns as they tend to live in "remote rural or coastal areas and in former industrial areas, especially in the Midlands" according to the 2017 Social Mobility Commission's 'State of the nation' [report](https://www.gov.uk/government/publications/state-of-the-nation-2017). I'm from one of the parts of the UK specifically identified in this report, the High Peak, and it's unfortunately not all that surprising. Higher education institutions, and jobs which require advanced qualifications, are physically and psychologically at a distance. Other poorly ranked areas are similar: they include West Somerset (324 of 324), Thanet (274 of 324), and a cluster around West Norfolk.
 
