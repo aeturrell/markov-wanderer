@@ -1,0 +1,30 @@
+project:
+  type: website
+
+website:
+  # site-url: https://aeturrell.github.io/markov-wanderer
+  title: "Markov Wanderer"
+  description: "A blog on economics, coding, and data science. Views are my own."
+  favicon: logo.ico
+  twitter-card:
+    creator: "@arthurturrell"
+  navbar:
+    right:
+      - icon: laptop
+        href: http://aeturrell.github.io/home/
+      - icon: github
+        href: https://github.com/aeturrell
+      - icon: twitter
+        href: https://twitter.com/arthurturrell
+      - icon: rss
+        href: index.xml
+      - about.qmd
+      # - archive.qmd
+google-analytics:
+format:
+  html:
+    theme: flatly
+    css: styles.css
+cookie-consent: true
+
+

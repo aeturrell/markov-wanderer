@@ -1,0 +1,25 @@
+---
+title: "About"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/arthurturrell
+    - icon: github
+      text: Github
+      href: https://github.com/aeturrell
+    - icon: laptop
+      text: Website
+      href: http://aeturrell.github.io/home/
+    - icon: search
+      text: Google Scholar
+      href: https://scholar.google.co.uk/citations?user=6KoCnQEAAAAJ&hl=en
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/arthur-turrell-8b789891/
+
+---
+
+This is Arthur Turrell's blog. The opinions expressed are his and his alone, even when they're bad. You can find out more about Arthur over at his [website](http://aeturrell.github.io/home/).

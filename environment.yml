@@ -1,0 +1,38 @@
+name: blog
+channels:
+  - conda-forge
+dependencies:
+  - jupyter
+  - numpy
+  - pandas
+  - pip
+  - python=3.9
+  - pyyaml
+  - scipy
+  - seaborn
+  - statsmodels
+  - yaml
+  - pyarrow
+  - geopandas
+  - autopep8
+  - geoplot
+  - arrow
+  - osmnx
+  - pandas-datareader
+  - pandasdmx
+  - pre-commit
+  - linearmodels
+  - sympy
+  - pingouin
+  - plotly
+  - plotnine
+  - jupyterlab
+  - nbstripout
+  - ghp-import
+  - pymc
+  - bambi
+  - openpyxl
+  - slugify
+  - pip:
+    - stargazer
+    - skimpy

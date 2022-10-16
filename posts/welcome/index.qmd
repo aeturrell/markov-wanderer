@@ -1,0 +1,18 @@
+---
+title: "Welcome To The New Home for My Blog"
+date: "2022-10-16"
+categories: [news]
+bibliography: ../../bibfile.bib
+---
+
+This is the first post on a brand new blog site: welcome!
+
+![](thumbnail.jpg)
+
+After a while of getting (minorly) frustrated with the code-integration available for a Jekyll-based blog, I'm making the switch to one that's based on [Quarto](https://quarto.org/), the document and website preparation software tool that supports executable chunks in Python, R, and other-languages.
+
+In getting this setup, [this post](https://albert-rapp.de/posts/13_quarto_blog_writing_guide/13_quarto_blog_writing_guide.html) by Albert Rapp has been especially useful. A while ago, I did a post on [three ways to blog](../three-ways-to-blog-with-code/index.qmd), which at that time were Jupyter (with [nbconvert](https://nbconvert.readthedocs.io/) to markdown with execution), [codebraid](https://github.com/gpoore/codebraid), and R markdown--none of which were perfect. Quarto takes what was good about R markdown and makes it cross-language plus a bit better.[^a]
+
+There are *tons* of nice features of blogging with Quarto, but one that's particularly useful for me is being able to have proper citations, like @turrell2013monte. And the support for executable code plus output figures--in multiple languages--is more or less unparalled.
+
+[^a]: Though it's still based on the fantastic [pandoc](https://pandoc.org/).
