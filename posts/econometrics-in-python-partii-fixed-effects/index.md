@@ -2,7 +2,7 @@
 date: "2018-02-20"
 layout: post
 title: Econometrics in Python Part II - Fixed effects
-categories: [code, econometrics]
+categories: [code, econometrics, python]
 ---
 
 

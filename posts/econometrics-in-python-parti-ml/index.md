@@ -2,7 +2,7 @@
 date: "2018-02-10"
 layout: post
 title: Econometrics in Python part I - Double machine learning
-categories: [code, econometrics]
+categories: [code, econometrics, python]
 ---
 *The idea is that this will be the first in a series of posts covering econometrics in Python.*
 

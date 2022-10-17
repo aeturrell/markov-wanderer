@@ -2,7 +2,7 @@
 date: "2020-10-24"
 layout: post
 title: 10 less well-known Python packages
-categories: [code, open-source]
+categories: [code, open-source, python]
 ---
 
 (Remember that to use these, you will need to run `pip install packagename` on the command line.)

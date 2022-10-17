@@ -2,7 +2,7 @@
 date: "2018-03-28"
 layout: post
 title: Econometrics in Python part III - Estimating heterogeneous treatment effects using random forests
-categories: [code, econometrics, machine-learning]
+categories: [code, econometrics, machine-learning, python]
 ---
 
 *The third in a series of posts covering econometrics in Python. Here I look at 'causal forests'.*

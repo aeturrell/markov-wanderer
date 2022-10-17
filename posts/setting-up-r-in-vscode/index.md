@@ -2,7 +2,7 @@
 date: "2021-11-04"
 layout: post
 title: Setting up R in Visual Studio Code
-categories: [code]
+categories: [code, rstats]
 ---
 
 This post will show you how to set up Visual Studio Code as an integrated development environment for the statistical language R. This will include some useful features such as:

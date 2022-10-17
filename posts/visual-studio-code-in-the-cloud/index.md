@@ -2,7 +2,7 @@
 date: "2022-09-28"
 layout: post
 title: Visual Studio Code on the Cloud
-categories: [code, research, cloud]
+categories: [code, research, cloud, python, rstats]
 ---
 
 Visual Studio Code is incredibly powerful, whether it's for writing [markdown](https://aeturrell.github.io/coding-for-economists/wrkflow-markdown.html), writing [quarto](https://aeturrell.github.io/coding-for-economists/wrkflow-quarto.html) (.qmd) files, getting syntax highlighting and peerless language support (eg auto-completion), getting peerless git support, working with a [co-pilot](https://github.com/features/copilot), [working with collaborators in real-time](https://visualstudio.microsoft.com/services/live-share/), or even running [R code in a modern REPL](../setting-up-r-in-vscode/index.md). For me, it's the best IDE by some way. One of its strongest features for data science is its ability to do interactive window coding with scripts *and* notebooks. Yet most online or cloud-based data science services focus only on notebooks. Wouldn't it be great if there was a reliable way to use all of Visual Studio Code's features in the cloud?[^1]

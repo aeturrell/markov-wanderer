@@ -2,7 +2,7 @@
 date: "2018-01-31"
 layout: post
 title: Making a publication quality plot with Python (and latex)
-categories: [research, visualisation, code]
+categories: [research, visualisation, code, python]
 ---
 
 ### Update 2021.03.06
