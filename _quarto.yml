@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  # site-url: https://aeturrell.github.io/markov-wanderer
+  site-url: https://aeturrell.github.io/markov-wanderer
   title: "Markov Wanderer"
   description: "A blog on economics, coding, and data science. Views are my own."
   favicon: logo.ico

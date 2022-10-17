@@ -27,12 +27,11 @@ So not only were different decisions made, there seems to be no clearly identifi
 
 There is usually scope for reasonable alternative model specifications when estimating causal coefficients, and those coefficients will vary with those specifications. Let's abuse notation and call this property
 
-$$ 
+$$
 \frac{\text{d} \beta}{\text{d} \text{ specification}}
 $$
 
 where $\beta$ is the coefficient of interest.
-
 
 What can we do to ensure conclusions are robust to model specification change when that change is due to equally valid feature engineering-type choices? The art is all in deciding what is meant by, or what is a valid form for, $\text{d} \text{ specification}$ and showing that, even under different specifications, the estimates of $\beta$ are robust.
 
@@ -46,37 +45,33 @@ But there may be times when it's appropriate to show many different specificatio
 
 ## Enter specification curve analysis
 
-One way to more comprehensively analyse $ \frac{\text{d} \beta}{\text{d} \text{ specification}}$ is *specification curve analysis*.
+One way to more comprehensively analyse $\frac{\text{d} \beta}{\text{d} \text{specification}}$ is *specification curve analysis*.
 
 Specification curve analysis as introduced in this [paper](http://sticerd.lse.ac.uk/seminarpapers/psyc16022016.pdf) looks for a more exhaustive way of trying out alternative specifications. from the paper, the three steps of specification curve analysis are:
-1. identifying the set of theoretically justified, statistically valid, and non-redundant analytic specifications;
-2. displaying alternative results graphically, allowing the identification of decisions producing different results; and 
-3. conducting statistical tests to determine whether as a whole results are inconsistent with the null hypothesis. 
 
+1. identifying the set of theoretically justified, statistically valid, and non-redundant analytic specifications;
+2. displaying alternative results graphically, allowing the identification of decisions producing different results; and
+3. conducting statistical tests to determine whether as a whole results are inconsistent with the null hypothesis.
 
 For a good example of specification curve analysis in action, see this recent [Nature Human Behaviour paper](https://doi.org/10.1038/s41562-018-0506-1) on the association between adolescent well-being and the use of digital technology.
 
-
-
 ## An example in Python
-
 
 This example is going to use the concrete data I've [used previously]({{site.baseurl}}/2018/05/05/running-many-regressions-alongside-pandas/) to look at the effect of 'superplasticizer' on the compressive strength of concrete. I'm going to skip over step 1 quickly, as it will vary a lot depending on your dataset.
 
 ### Step 1
 
-The data don't actually require any feature engineering, so we'll have to pretend that - beyond those two key variables - we're not sure whether other features should be included or not. 
+The data don't actually require any feature engineering, so we'll have to pretend that - beyond those two key variables - we're not sure whether other features should be included or not.
 
 Actually, let's make it a *bit* more interesting and say that 'coarse' and 'fly' are actually based on the same raw data, they are just engineered differently in the data for analysis. Therefore we do not include them together in the model at the same time. That really covers step 1.
 
-
 ### Step 2
+
 For step 2, displaying alternative results graphically, we need the data and the code.
 
 First, let's set up the environment, then read in the data:
 
-
-```python
+```{{python}}
 import pandas as pd
 import statsmodels.api as sm
 import numpy as np
@@ -100,8 +95,7 @@ jsonPlotSettings = {'xtick.labelsize': 16,
 plt.style.use(jsonPlotSettings)
 ```
 
-
-```python
+```{{python}}
 df = pd.read_excel('../../ManyRegsPandas/Concrete_Data.xls')
 df = df.rename(columns=dict(zip(df.columns,[x.split()[0] for x in df.columns])))
 print(df.head())
@@ -118,7 +112,7 @@ print(df.head())
 This is the pure question - what dependence does concrete strength have on the use of superplasticizer?
 
 
-```python
+```{{python}}
 results = sm.OLS(df['Concrete'], df['Superplasticizer']).fit()
 print(results.summary())
 ```
@@ -148,28 +142,27 @@ print(results.summary())
     Warnings:
     [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 
-
 That's the baseline regression, with $\beta = 3.4897$. Now we need to try the alternative specifications.
 
 We have 7 potential control variables. It's worth bearing in mind what the upper limit on the number of specifications you could potentially run could be, for computational reasons. Each combination is going to be $n$ choose $k$, or
 
 $$
-\frac {n!}{k!(n-k)!}
+\frac{n!}{k!(n-k)!}
 $$
 
-We want to look at all possible values of $k$, which is 
+We want to look at all possible values of $k$, which is
 
-$$ 
-\sum_{0\leq k \leq n} \textstyle {\frac {n!}{k!(n-k)!}} = 2^n 
+$$
+\sum_{0\leq k \leq n} \textstyle {\frac {n!}{k!(n-k)!}} = 2^n
 $$
 
 So this is not feasible as $n$ gets very large, but should be okay here.
 
 In this case, there are also some mutually exclusive combinations which will reduce the overall number - remember I decided that 'coarse' and 'fly' are different ways of creating the same variable. Let's create all possible $2^7 = 128$ combinations first. We can use the Python combinations function to do this.
- 
 
 
-```python
+
+```{{python}}
 # A list of the controls
 controls = [x for x in df.columns if x not in ['Concrete','Superplasticizer']]
 # Generate all combinations in a list of tuples
@@ -182,8 +175,7 @@ Allcomb = [list(x) for x in Allcomb]
 
 Let's have a look at some of these; the first 5, a random sample of 5, the last 1, and the total number
 
-
-```python
+```{{python}}
 print(Allcomb[:5])
 for i in np.random.choice(Allcomb,5):
     print(i)
@@ -200,37 +192,31 @@ print(len(Allcomb))
     ['Cement', 'Blast', 'Fly', 'Water', 'Coarse', 'Fine', 'Age']
     128
 
-
 Note that the original specification is included here as [], i.e. no control. We now need to remove the mutually exclusive combinations - that is any combination which has both 'Coarse' and 'Fly' in it. Then we'll look at the last entry to see if it has worked.
 
-
-```python
+```{{python}}
 Allcomb = [y for y in Allcomb if y not in [x for x in Allcomb if ('Coarse' in x) and ('Fly' in x)]]
 Allcomb[-1]
 ```
 
 
-
-
     ['Cement', 'Blast', 'Water', 'Coarse', 'Fine', 'Age']
-
 
 
 Great - the old last combination, which mixed features, has been dropped. Now we need to iterate over all possible regression specifications and store the coefficient calculated in each one.
 
 
-```python
-AllResults = [sm.OLS(df['Concrete'], 
+```{{python}}
+AllResults = [sm.OLS(df['Concrete'],
                       df[['Superplasticizer']+x]).fit() for x in Allcomb]
 ```
 
 You can see this has run all of the possible combinations; here are the regression results for the last entry:
 
 
-```python
+```{{python}}
 AllResults[-1].params
 ```
-
 
 
 
@@ -243,13 +229,10 @@ AllResults[-1].params
     Age                 0.106915
     dtype: float64
 
-
-
 Great. Let's store the results in a dataframe. As well as the coefficient on superplasticizer, I'll store the standard errors, 'bse', and the pvalues for the independent variables. I'll then reorder everything by coefficient value.
 
 
-
-```python
+```{{python}}
 # Get coefficient values and specifications
 df_r = pd.DataFrame([x.params['Superplasticizer'] for x in AllResults],columns=['Coefficient'])
 df_r['Specification'] = Allcomb
@@ -264,7 +247,7 @@ df_r.index.names = ['Specification No.']
 print(df_r.sample(10))
 ```
 
-                       Coefficient                 Specification       bse  \
+                       Coefficient                 Specification       bse  
     Specification No.                                                        
     31                    1.044216  [Cement, Blast, Coarse, Age]  0.059440   
     27                    1.034839   [Cement, Blast, Water, Age]  0.058165   
@@ -294,8 +277,7 @@ print(df_r.sample(10))
 Now I will plot the results for the coefficient as a function of the different specifications, adding the standard errors as a swathe.
 
 
-
-```python
+```{{python}}
 plt.close('all')
 fig, ax = plt.subplots()
 ax.scatter(df_r.index,df_r['Coefficient'],lw=3.,label='',s=0.4,color='b')
@@ -309,7 +291,6 @@ ax.legend(frameon=False, loc='upper left',ncol=2,handlelength=4)
 plt.show()
 ```
 
-
 ![Coefficients by specification number](output_18_0.png)
 
 
@@ -322,7 +303,7 @@ With a matrix of 0s and 1s with rows as specifications and columns as variables,
 
 
 
-```python
+```{{python}}
 df_r['Specification'] = df_r['Specification'].apply(lambda x: sorted(x))
 df_r['SpecificationCounts'] = df_r['Specification'].apply(lambda x: Counter(x))
 print(df_r.head(5))
@@ -362,7 +343,7 @@ print(df_r.head(5))
 
 
 
-```python
+```{{python}}
 df_spec = df_r['SpecificationCounts'].apply(pd.Series).fillna(0.)
 df_spec = df_spec.replace(0.,False).replace(1.,True)
 print(df_spec.head(10))
@@ -383,7 +364,7 @@ print(df_spec.head(10))
 
 
 
-```python
+```{{python}}
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.imshow(df_spec.T, aspect='auto', cmap=plt.cm.gray_r, interpolation='None')
@@ -402,7 +383,7 @@ Now let's try colouring these depending on whether they are significant or not. 
 This will follow a somewhat similar approach but begins with the pvalues. The first step is to convert the dict of pvalues to columns, one for each variable, in a new dataframe. I'll then sort the columns and set the cell values to 0 for significant, 1 for insignificant (at the 0.05 level), and leave missing entries as NaNs. When it comes to plotting, I'll set those NaNs to appear white while the valid in/significant entries appear in the colours of the plasma heatmap.
 
 
-```python
+```{{python}}
 df_params = df_r['pvalues'].apply(pd.Series)
 df_params = df_params.reindex(sorted(df_params.columns), axis=1)
 df_params[np.abs(df_params)>0.05] = 1 # Insignificant
@@ -429,7 +410,7 @@ print(df_params.head(5))
 
 
 
-```python
+```{{python}}
 fig = plt.figure()
 ax = fig.add_subplot(111)
 cmap = plt.cm.plasma
@@ -440,7 +421,6 @@ ax.set_ylabel('Control')
 plt.yticks(range(len(controls)),controls)
 ax.yaxis.major.formatter._useMathText = True
 ```
-
 
 ![Controls by specification number.](output_25_0.png)
 
@@ -458,7 +438,7 @@ Although, in our case, it is the superplasticizer value that will be shuffled. L
 
 
 
-```python
+```{{python}}
 Num_shuffles = 50
 
 def retShuffledResults():
@@ -505,14 +485,14 @@ print(df_r_shuffle.head())
 Notice that there are multiple shuffled regressions for each specification number. We take the median of over all possible values for each specification number:
 
 
-```python
+```{{python}}
 med_shuffle = df_r_shuffle.quantile(0.5).sort_values().reset_index().drop('index',axis=1)
 ```
 
 These data can be added onto the main plot, along with everything else:
 
 
-```python
+```{{python}}
 plt.close('all')
 f, axarr = plt.subplots(2, sharex=True,figsize=(10,10))
 for ax in axarr:
@@ -566,12 +546,13 @@ The authors of the specification curve analysis paper provide three measures of 
 (ii) the share of estimates in the specification curve that are of the dominant sign, and 
 (iii) the share that are of the dominant sign and also statistically significant (p<.05)
 
-### Step 3 part (i)
+### Step 3 part i
+
 (i) is calculated from the % of coefficient estimates with as or more extreme results. We need to divide the number of bootstrapped datasets with larger median effect sizes than the original analysis by the total number of bootstraps, which gives the p-value of this test. 
 
 
 
-```python
+```{{python}}
 pvalue_i = np.double(sum(med_shuffle>np.median(df_r['Coefficient'])))/np.double(len(med_shuffle))
 print('{:.3f}'.format(pvalue_i))
 ```
@@ -579,12 +560,13 @@ print('{:.3f}'.format(pvalue_i))
     0.005
 
 
-### Step 3 part (ii)
+### Step 3 part ii
+
 ii) requires this to be repeated but only with results of dominant sign. You can see from the plot that we're going to again get a very large p-value but here's the process anyway.
 First, we determine the dominant sign and then calculate the p-value for part ii)
 
 
-```python
+```{{python}}
 gtr_than_zero = np.argmax( [len(df_r[df_r['Coefficient']<0.]), len(df_r[df_r['Coefficient']>0.])]) # 0 is <0 and 1 is >0
 if(gtr_than_zero==1):
     gtr_than_zero = True
@@ -602,13 +584,12 @@ print('{:.3f}'.format(pvalue_ii))
     0.005
 
 
-### Step 3 part (iii)
+### Step 3 part iii
 
 For part iii), we repeat the same process but only for those which were statistically significant and of dominant sign.
 
 
-
-```python
+```{{python}}
 med_shuffle_signif = df_r_shuffle[df_r_shufflepval>0.05].quantile(0.5).sort_values().reset_index().drop('index',axis=1).dropna()
 if(gtr_than_zero):
     pvalue_iii = np.double(sum(med_shuffle_signif[med_shuffle_signif>0]>np.median(df_r['Coefficient'])))/np.double(len(med_shuffle_signif[med_shuffle_signif>0]))
@@ -619,11 +600,8 @@ print('{:.3f}'.format(pvalue_iii))
 
     0.006
 
-
-As was likely from visual inspection of the figures, the p-values are $ \leq 0.01 $ in each case. We have tested whether, when considering all the possible specifications, the results found are inconsistent with results when the null hypothesis is true (that superplasticizer and strength are unrelated). On the basis of the p-values, we can safely reject the null that the bootstrapped and original specifications are consistent. The tests as carried out strongly imply that $\beta > 0 $ and that this conclusion is robust to specification change.
+As was likely from visual inspection of the figures, the p-values are less than or equal to 0.01 in each case. We have tested whether, when considering all the possible specifications, the results found are inconsistent with results when the null hypothesis is true (that superplasticizer and strength are unrelated). On the basis of the p-values, we can safely reject the null that the bootstrapped and original specifications are consistent. The tests as carried out strongly imply that beta is greater than zero and that this conclusion is robust to specification change.
 
 ## Conclusion
 
 Researchers are always going to disagree about how to analyse the same data set. Although which specifications to include or exclude from specification curve analysis inevitably involves choices, I think that this is a useful and more comprehensive way to see how sensitive results are to those choices.
-
-
