@@ -17,7 +17,7 @@ plt.style.use('plot_style.txt')
 
 before doing any plotting. The contents of 'plot_style.txt' are:
 
-```
+```text
 xtick.color: 323034
 ytick.color: 323034
 text.color: 323034
@@ -79,7 +79,8 @@ As an author, making plots easily digestible and a part of the narrative of the 
 I often want to do all of the above, so I've put together an example. While much will need to be changed for other examples, it's a good starting point.
 
 Let's begin with some parameter settings. Matplotlib, the Python plotting library, has a style file with defaults in. I'm going to change a few of these. They're mostly obvious.
-```
+
+```text
 xtick.labelsize: 16
 ytick.labelsize: 16
 font.size: 15
@@ -93,13 +94,17 @@ legend.fontsize: 13
 mathtext.fontset: stix
 font.family: STIXGeneral
 ```
+
 The first real choice is about the relative size of the figure, and the font sizes of the plot title, axes titles, and label sizes. The journal *Nature* requires that [double-column figures be 183 mm wide](https://www.nature.com/nature/for-authors/final-submission), which is 7.2 inches using the units which Matplotlib works in. Heights can differ, but I choose an eye-pleasing 1.6 ratio. The only other really important choice here is what fonts to use. I've gone for Stix as it can be used for both latex and normal fonts, and it looks professional in plots. To use these settings, they just need to go in a plain text file called 'PaperDoubleFig.mplstyle' which we can point Matplotlib at later.
 
 ### The data
+
 The data for the example are from the [Office for National Statistics](https://www.ons.gov.uk/) (ONS) website and are international comparisons of productivity. You can find the [raw data here](https://www.ons.gov.uk/economy/economicoutputandproductivity/productivitymeasures/bulletins/internationalcomparisonsofproductivityfinalestimates/2015), and I'm using the data behind their Figure 4. Although the page has an interactive feature, a hover which tells you the values in cross-section, the plot is hard to read if (as the article presumes) you're interested mostly in the UK relative to the other countries. We'll fix that later. Personally, I'm not a fan of the horizontal guide lines so I'll be omitting those too.
 
 ### The code
+
 Let's see some code! Import the required libraries, and load up the style file for Matplotlib:
+
 ```python
 import os
 import numpy as np
@@ -146,9 +151,11 @@ dashesStyles = [[3,1],
 # Point to the data
 fileName = 'rftxlicp1017unlinked.xls'
 ```
-You'll notice that I've also defined ```colourWheel``` and ```dashesStyles```. These are for plotting, and encode different colours and line dashes respectively. Each line in the time series plot will be differentiated by iterating over both. The colours originally come from [colour brewer](http://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3), with a few additions and changes. There are more colours than are needed, but this set of colours can be used in other plots, or for qualitative choropleths.
+
+You'll notice that I've also defined `colourWheel` and `dashesStyles`. These are for plotting, and encode different colours and line dashes respectively. Each line in the time series plot will be differentiated by iterating over both. The colours originally come from [colour brewer](http://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3), with a few additions and changes. There are more colours than are needed, but this set of colours can be used in other plots, or for qualitative choropleths.
 
 Next, read in the data and process it. Here's one I made earlier:
+
 ```python
 #===========================================================
 # Read in and prep the data
@@ -163,6 +170,7 @@ df = df.dropna()
 # Take a look to make sure this has worked nicely
 df.head()
 ```
+
 which produces:
 
 | | Canada | France | Germany | Italy | Japan | UK   | US   | G7   | G7 exc. UK |
@@ -212,12 +220,18 @@ Here's the plot which comes out, necessarily rendered here as a png but saved as
 
 ![GDP per hour across G7 countries](ProdCountries.png)
 
-The code looks more complicated than just using ```df.plot()``` but we get a lot for that extra complexity, including: the UK productivity time series being emphasised relative to those of the other countries, each country having a unique combination of colour and dash, the number of tick marks being sensible, only individual countries being plotted (```df.columns[:-2]``` omits the two G7 related columns), and the y-axis ticks labels appearing on the right-hand side (which I think looks better for time series plots). Note that I've specified dpi=300 to set the resolution to what is often the *minimum* for journal submission.
+The code looks more complicated than just using `df.plot()` but we get a lot for that extra complexity, including: the UK productivity time series being emphasised relative to those of the other countries, each country having a unique combination of colour and dash, the number of tick marks being sensible, only individual countries being plotted (`df.columns[:-2]` omits the two G7 related columns), and the y-axis ticks labels appearing on the right-hand side (which I think looks better for time series plots). Note that I've specified dpi=300 to set the resolution to what is often the *minimum* for journal submission.
 
 I mentioned latex in the post title. Assuming you have the full [Miktex distribution](https://miktex.org/) installed (for example), then adding in latex is as easy as putting it into the title or label strings so that
+
+```text
+r"$\frac{\phi}{\zeta}$"
 ```
-r'$\frac{\phi}{\zeta}$'
-```
-gives $$\frac{\phi}{\zeta}$$ in the figure. This will render just like the other text in the figure.
+
+gives
+
+$$\frac{\phi}{\zeta}$$
+
+in the figure. This will render just like the other text in the figure.
 
 No doubt there is a better way of packaging some of this up for use in other examples. As an alternative, [Seaborn](https://seaborn.pydata.org/) is a fantastic tool for quick, easy, good-looking data visualisation in Python but for journal articles, a straighter, plainer style like this may be more appropriate.

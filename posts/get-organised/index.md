@@ -360,4 +360,4 @@ $$
 \end{aligned}
 $$
 
-where capital Greek and Latin characters represent matrices, arrows over characters denote vectors, and it is assumed that the different components of the `innovations' in the error updating equation are uncorrelated so that $ \Sigma $ is a diagonal matrix. The model has one unobserved factor that follows an AR(2), and the errors similarly follow an AR(2).
+where capital Greek and Latin characters represent matrices, arrows over characters denote vectors, and it is assumed that the different components of the `innovations' in the error updating equation are uncorrelated so that Sigma is a diagonal matrix. The model has one unobserved factor that follows an AR(2), and the errors similarly follow an AR(2).

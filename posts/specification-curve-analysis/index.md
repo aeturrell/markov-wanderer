@@ -45,7 +45,7 @@ But there may be times when it's appropriate to show many different specificatio
 
 ## Enter specification curve analysis
 
-One way to more comprehensively analyse $\frac{\text{d} \beta}{\text{d} \text{specification}}$ is *specification curve analysis*.
+One way to more comprehensively do this kind of analysis is *specification curve analysis*.
 
 Specification curve analysis as introduced in this [paper](http://sticerd.lse.ac.uk/seminarpapers/psyc16022016.pdf) looks for a more exhaustive way of trying out alternative specifications. from the paper, the three steps of specification curve analysis are:
 
@@ -600,7 +600,7 @@ print('{:.3f}'.format(pvalue_iii))
 
     0.006
 
-As was likely from visual inspection of the figures, the p-values are less than or equal to 0.01 in each case. We have tested whether, when considering all the possible specifications, the results found are inconsistent with results when the null hypothesis is true (that superplasticizer and strength are unrelated). On the basis of the p-values, we can safely reject the null that the bootstrapped and original specifications are consistent. The tests as carried out strongly imply that beta is greater than zero and that this conclusion is robust to specification change.
+As was likely from visual inspection of the figures, the p-values are less than or equal to 0.01 in each case. We have tested whether, when considering all the possible specifications, the results found are inconsistent with results when the null hypothesis is true (that superplasticizer and strength are unrelated). On the basis of the p-values, we can safely reject the null that the bootstrapped and original specifications are consistent. The tests as carried out strongly imply that Beta is greater than zero and that this conclusion is robust to specification change.
 
 ## Conclusion
 
