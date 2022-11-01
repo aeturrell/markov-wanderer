@@ -95,8 +95,8 @@ def plotFunc(func):
               extent=[X_0.min(), X_0.max(), X_1.min(), X_1.max()],
              cmap='plasma')
     plt.colorbar()
-    plt.xlabel(r'$X_0$')
-    plt.ylabel(r'$X_1$')
+    plt.xlabel(r"$X_0$")
+    plt.ylabel(r"$X_1$")
 plotFunc(tauxy)
 ```
 
