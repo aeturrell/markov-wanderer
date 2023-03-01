@@ -2,7 +2,7 @@
 date: "2023-01-13"
 layout: post
 title: "Why you shouldn't code on your work laptop"
-categories: [code, open-source, cloud, data science]
+categories: [code, open-source, cloud, data science, work chat]
 bibliography: refs.bib
 image: elisa-ventur-bmJAXAz6ads-unsplash.jpg
 ---
