@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Turrell">
+<meta name="dcterms.date" content="2023-06-15">
+
+<title>Markov Wanderer - The mystery of stuff: why all the self-storage?</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Markov Wanderer - The mystery of stuff: why all the self-storage?">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://aeturrell.github.io/markov-wanderer/posts/self-storage-mystery/overpass_results.png">
+<meta name="twitter:creator" content="@arthurturrell">
+<meta name="twitter:image-height" content="1418">
+<meta name="twitter:image-width" content="1099">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Markov Wanderer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="http://aeturrell.github.io/home/" rel="" target=""><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/aeturrell" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/arthurturrell" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">The mystery of stuff: why all the self-storage?</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">data</div>
+                <div class="quarto-category">geospatial</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Arthur Turrell </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 15, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link active" data-scroll-target="#hypotheses">Hypotheses</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a>
+  <ul class="collapse">
+  <li><a href="#open-street-map-data" id="toc-open-street-map-data" class="nav-link" data-scroll-target="#open-street-map-data">Open Street Map data</a></li>
+  <li><a href="#uk-site-firm-level-data" id="toc-uk-site-firm-level-data" class="nav-link" data-scroll-target="#uk-site-firm-level-data">UK site-firm level data</a></li>
+  <li><a href="#google-maps" id="toc-google-maps" class="nav-link" data-scroll-target="#google-maps">Google Maps</a></li>
+  <li><a href="#scraping-the-websites-of-the-self-storage-firms" id="toc-scraping-the-websites-of-the-self-storage-firms" class="nav-link" data-scroll-target="#scraping-the-websites-of-the-self-storage-firms">Scraping the websites of the self-storage firms</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>There’s a mystery at the fringes of our towns and cities: beyond the concrete circulars and just off the dual carriageways, a seemingly growing amount of our stuff is collecting dust in purpose-built warehouses. The puzzle is why so many self-storage units have sprung up across the UK and what people are storing in them that they need so very rarely.</p>
+<p>I should be clear: I don’t know if the number has increased or not. It just <em>seems</em> like their numbers have increased, and others have noticed this and remarked upon it to me too (I have some pretty thrilling conversations with data scientists and economists). It was ONS Fellow <a href="https://www.strath.ac.uk/staff/mcintyrestuartprofessor/">Professor Stuart McIntyre</a> who first asked me the question and I’ve been thinking about it since.</p>
+<p>You may, by now, be wondering why you should care. This isn’t just about an interesting phenomenon with self-storage units, though that does seem worth exploring. What it’s really about is what we can find out about the <em>local sites</em> of firms. This could be a single, independent chippy, the site of a chain restaurant, or, indeed, an outpost of a self-storage firm. In short, lots of entities that people do care about.</p>
+<p>So I thought it would be fun to at least look at what data are available to estimate the number of these self-storage units and whether it’s changing over time.</p>
+<section id="hypotheses" class="level2">
+<h2 class="anchored" data-anchor-id="hypotheses">Hypotheses</h2>
+<p>Although this post is more about the how, it’s fun to think a little bit about the ‘why?’ too.</p>
+<p>In films, books, and television, storage units are shady places where murderers keep their grisly trophies or international criminal gangs stash ill-gotten gains. In practice, they’re likely to be a place to dump furniture that there’s no space for, and this suggests a few explanations.</p>
+<p>Maybe the falling cost of budget furniture is partly behind the rise in storage units or perhaps it’s our ageing population that, sadly, often means clearing out the houses of elderly relatives after they are gone (but which their descendants can’t quite bear to part with). Of course, house prices are high so using storage may be cheaper than having a bigger home, but it’s a lot less convenient if you need something. You can imagine people converting their garages to extra bedrooms and stashing their junkier items in storage.</p>
+<p>Having said that there could be economic reasons, these units are expensive! The price for 35 sq ft (3.5 square metres) in a self-storage place in Croydon is around £37 <em>a week</em>. You have to really care about that stuff to pay that much to keep it. At a time when most people are cutting back, it seems strange to spend so much on just keeping some stuff that is rarely used.</p>
+<p>Another potential explanation is that the market for second-hand goods has become deeper, so there’s more storage needed not in homes to park it while it’s waiting to be transacted.</p>
+<p>There are lots of possible economic hypotheses behind the rise of self-storage, but for now what we want data to tell us whether or not this anecdotal effect is real or not.</p>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<blockquote class="blockquote">
+<p>‘“Data! Data! Data!”, he cried impatiently. “I can’t make bricks without clay.”’</p>
+<p>—Sherlock Holmes</p>
+</blockquote>
+<p>Before you get too excited, there isn’t a killer data source here that I’m aware of. And it’s complicated by needing a <em>time series</em> rather than simply a cross-section, which means we need historical data. There are a range of different possible options we could pursue to <em>try</em> to get a handle on this:</p>
+<ol type="1">
+<li>Open Street Map data</li>
+<li>UK firm-site level data, eg from the Interdepartmental Business Database</li>
+<li>Using the Google Maps API to count sites</li>
+<li>Scraping the websites of the main self-storage firms</li>
+</ol>
+<p>Let’s look at each of these strategies in turn.</p>
+<section id="open-street-map-data" class="level3">
+<h3 class="anchored" data-anchor-id="open-street-map-data">Open Street Map data</h3>
+<p>So we’re going to use the crowd-sourced Open Street Map data to try to answer this question. It has a number of caveats: it’s only updated (items added or deleted) when a member of the public decides to update it. So it may not give a totally accurate picture of what’s going on, but it’s a fantastic resource nonetheless because it aspires to be comprehensive and consistent in its tags. While it may not give a perfect count of what’s out there, you hope that it might track it.</p>
+<p>We will use the Open Street Map <a href="https://wiki.openstreetmap.org/wiki/Overpass_API">Overpass Turbo API</a> to do a query on all self-storage units in the UK. The query can be run <a href="https://overpass-turbo.eu/">here</a>.</p>
+<pre class="text"><code>[out:json];
+area["ISO3166-1"="GB"]-&gt;.uk;
+(
+  node["shop"="storage_rental"](area.uk);
+  way["shop"="storage_rental"](area.uk);
+  relation["shop"="storage_rental"](area.uk);
+);
+out center;</code></pre>
+<p>In the interactive API, this produces a nice map of all ways and nodes (two types of object defined by the underlying data structures of Open Street Map).</p>
+<p><img src="overpass_results.png" class="img-fluid" alt="Map of self-storage units according to Open Street Map."></p>
+<p>If you save the data to a GeoJSON file and open it with <a href="https://geopandas.org/"><strong>geopandas</strong></a>, you can then count up the number of instances using</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> gpd.read_file(Path(<span class="st">"export.geojson"</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>val_counts <span class="op">=</span> df[<span class="st">"name"</span>].value_counts()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>val_counts[val_counts<span class="op">&gt;</span><span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<table class="table">
+<caption>Numbers of self-storage sites by firm, according to Open Street Map data</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Big Yellow Self Storage</td>
+<td style="text-align: right;">40</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Safestore</td>
+<td style="text-align: right;">38</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Access Self Storage</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lok’nStore</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UK Storage Company</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ready Steady Store</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Storage King</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Shurgard Self Storage</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Safestore Self Storage</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+<p>Unfortunately, this just doesn’t check out with other information. We can check how many units Big Yellow actually have on their website, and it’s far more than 40 (the total is 107). Partly, this is about matching records. We can check this with</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>val_counts.index.<span class="bu">str</span>.contains(<span class="st">"Yellow"</span>).<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="text"><code>11</code></pre>
+<p>This means that 11 rows had a mention of “Yellow” in, whereas we expect only a single row (with all counts). If we sum up these rows as a rough proxy of what the number <em>should</em> be:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>val_counts.loc[val_counts.index.<span class="bu">str</span>.contains(<span class="st">"Yellow"</span>)].<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="text"><code>52</code></pre>
+<p>We get 52, still far short of what we know the total is (assuming Big Yellow Self Storage’s website is up to date!)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Even if the numbers were correct, we don’t just need the number for today, we need it <em>over time</em>. This is an API query that, in principle, can help us understand the change since 2019 (when used in combination with the other data we already got).</p>
+<pre class="text"><code>[out:json];
+area["ISO3166-1"="GB"]-&gt;.uk;
+(
+  node["shop"="storage_rental"](area.uk)(if: timestamp() &lt;= "2018-12-01T00:00:00Z");
+  way["shop"="storage_rental"](area.uk)(if: timestamp() &lt;= "2018-12-01T00:00:00Z");
+  relation["shop"="storage_rental"](area.uk)(if: timestamp() &lt;= "2018-12-01T00:00:00Z");
+);
+out center;</code></pre>
+<p>Again, you can export the results to a GeoJSON file and open it with <strong>geopandas</strong> and <em>then</em> compare it:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_time <span class="op">=</span> gpd.read_file(Path(<span class="st">"export_pre_2019.geojson"</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df_time[<span class="st">"name"</span>].value_counts().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this query, we find only 33 sites <em>in total</em>, and only one Big Yellow Self Storage site.</p>
+<p>This doesn’t check out either: using the ever-awesome internet archive, we can dial <a href="https://web.archive.org/web/20170225054741/https://www.bigyellow.co.uk/">the clock back to 25th Feb 2017</a> and lo and behold the website says:</p>
+<blockquote class="blockquote">
+<p>a network of 89 storage facilities across London and the UK in high profile, easy–to–access location</p>
+</blockquote>
+<p>Open Street Map is an amazing resource but, for this purpose, it just doesn’t have the information we’re looking for.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+</section>
+<section id="uk-site-firm-level-data" class="level3">
+<h3 class="anchored" data-anchor-id="uk-site-firm-level-data">UK site-firm level data</h3>
+<p>The Inter-Departmental Business Register is an excellent within-government resource that does have some site-level information (but those who work on it note that there’s lots of pitfalls in using these data).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>We could put in a request to the Office for National Statistics (ONS) to use the IDBR to produce the numbers of local units by firm but… they’d have to reject it! Even though you could walk down the street and see these units, and which firm they belong to, for yourself, it’s currently illegal for ONS to make firm-level data public even if it’s already in the public domain. The exact bit of legislation is outlined here:</p>
+<blockquote class="blockquote">
+<p>Unfortunately, we are unable to provide the names of organisations operating within a particular sector of the economy. Under s.39 of the Statistics and Registration Service Act 2007, personal information held by us (including that which identifies a body corporate), must not be disclosed. Furthermore, under s.9 of the Statistics of Trade Act 1947, the disclosure of information relating to an individual undertaking, obtained for statistical purposes, is prohibited. As the release of this information is prohibited by law, s.44 of the Freedom of Information Act 2000 applies.</p>
+</blockquote>
+<p><em>From a <a href="https://www.ons.gov.uk/aboutus/transparencyandgovernance/freedomofinformationfoi/companynames">note about firm names</a> on the ONS’ website</em></p>
+<p>However, we could ask the ONS to aggregate the number of local units by the relevant SIC code and year and publish that. But we would need to be confident that these firms are i) represented by one SIC code and ii) all have accurate SIC codes. Looking at a couple of firms on Companies House, I can see that one (Big Yellow) has SIC code “64306 - Activities of real estate investment trusts” while another, Safestore, has “68209 - Other letting and operating of own or leased real estate”, and another has “68320 - Management of real estate on a fee or contract basis” which makes me think there are problems on both fronts. None of them even have the same 4-digit SIC codes!</p>
+<p>If we were feeling bold, we might decide that existing data on <a href="https://www.ons.gov.uk/businessindustryandtrade/business/activitysizeandlocation/datasets/ukbusinessactivitysizeandlocation">Business Activity, Size, and Location</a> for one or more of these SIC codes could help us by acting as a proxy, but this dragnet approach would surely pull in lots of other kinds of business too. Furthermore, the data are available in separate Microsoft Excel files by year with empty cells and inconsistent formatting, so we’d have to spend some time writing code to extract the data in a consistent pattern. All not very satisfying.</p>
+<p>Overall, it seems like official data aren’t going to be massively helpful here.</p>
+</section>
+<section id="google-maps" class="level3">
+<h3 class="anchored" data-anchor-id="google-maps">Google Maps</h3>
+<p>Google Maps holds some promise. A quick search <a href="https://www.google.com/maps/search/self-storage/@51.4908126,-0.1310567,13.53z?entry=ttu">using the browser-based map</a> shows me that there is a category called “self-storage facility”. If we could use the API version to get results for all of the UK, we might be onto a winner.</p>
+<p>However, time is important in this question and (after checking with a Googler) there is no time dimension for Maps, it exists only in the present. Which is a shame because people would undoubtedly pay for snapshots in time and we could do a lot of interesting social analysis with it.</p>
+<p>When you’re not looking for a time series dimension though, Google Maps could be a great choice.</p>
+</section>
+<section id="scraping-the-websites-of-the-self-storage-firms" class="level3">
+<h3 class="anchored" data-anchor-id="scraping-the-websites-of-the-self-storage-firms">Scraping the websites of the self-storage firms</h3>
+<p>In this approach, we would scrape the websites of the self-storage firms to get information on their physical sites. This option has legs; so much so that we used it to validate our attempt to get these data from OSM. It works.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> The problem is that it requires us to scrape <em>all</em> of the websites of the self-storage firms and to also scrape their <em>historical</em> websites too (via the internet archive). That’s possible, but quite hard work, as my guess is that each firm-time combination will need a bespoke scraping solution.</p>
+<p>There is one big limitation beyond needing bespoke scrapers: the internet archive doesn’t get <em>all</em> of a website, and so might be missing the key pages / information, especially if we rely on tricks like grabbing the address only.</p>
+<p>That aside, how might you go about getting this data using a scraper? Each location probably has a full address somewhere, so we could just scrape the entire website and use some kind of NLP to grab locations and hope that what gets picked up corresponds to the sites that are offered. There’d be some errors, like recording their primary office, but if you kept the page that the addresses were scraped from you could do something like eliminate any pages with just a single address.</p>
+<p>To put rocket boosters on this approach, you could use a large language model (LLM). A new feature just introduced by OpenAI, called <a href="https://platform.openai.com/docs/guides/gpt/function-calling">function calling</a>, makes this possible: essentially, it allows you to generate <em>structured</em> output from an LLM—think a JSON file—by defining a schema of data fields you’d like and then feeding it the text to find those fields. There’s a great prototype gist <a href="https://gist.github.com/kylemcdonald/dbac21de2d7855633689f5526225154c">here</a> that shows how to send an LLM a Washington Post article about a shooting and get it to extract salient information according to a schema. As it’s short, I’m including the code below. Note that not only is the schema defined, but there is a short description of each field too.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openai</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">'https://www.lapdonline.org/newsroom/officer-involved-shooting-in-hollywood-area-nrf059-18ma/'</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>html <span class="op">=</span> requests.get(url).content</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>soup <span class="op">=</span> BeautifulSoup(html).find(<span class="st">'div'</span>, class_<span class="op">=</span><span class="st">'detail-cms-content'</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> soup.text.strip()</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>functions <span class="op">=</span> [</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"name"</span>: <span class="st">"extract_data"</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"description"</span>: <span class="st">"Add the summary of a newsroom article to the database."</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"parameters"</span>: {</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">"type"</span>: <span class="st">"object"</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                <span class="st">"properties"</span>: {</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"date"</span>: {</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"type"</span>: <span class="st">"string"</span>,</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"format"</span>: <span class="st">"date"</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>                    },</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"violent"</span>: {</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"type"</span>: <span class="st">"boolean"</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"description"</span>: <span class="st">"Does this describe a violent incident?"</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>                    },</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"fatal"</span>: {</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"type"</span>: <span class="st">"boolean"</span>,</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"description"</span>: <span class="st">"Does this describe a fatal incident?"</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>                    },</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"in_custody"</span>: {</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"type"</span>: <span class="st">"boolean"</span>,</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"description"</span>: <span class="st">"Did this happen in custody?"</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>                    },</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"unintentional_discharge"</span>: {</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"type"</span>: <span class="st">"boolean"</span>,</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"description"</span>: <span class="st">"Was this an unintentional discharge?"</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>                    },</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"injured"</span>: {</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"type"</span>: <span class="st">"array"</span>,</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"items"</span>: {</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"type"</span>: <span class="st">"string"</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>                        },</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"description"</span>: <span class="st">"What are the names of the people who were injured, if any?"</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>                    },</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"deceased"</span>: {</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"type"</span>: <span class="st">"array"</span>,</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"items"</span>: {</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"type"</span>: <span class="st">"string"</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>                        },</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"description"</span>: <span class="st">"What are the names of the people who are deceased, if any?"</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>                    },</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"serials"</span>: {</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"type"</span>: <span class="st">"array"</span>,</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"items"</span>: {</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"type"</span>: <span class="st">"number"</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>                        },</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"description"</span>: <span class="st">"What are the serial numbers of the officers involved?"</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>                    }</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>                },</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>            <span class="st">"required"</span>: [<span class="st">"date"</span>, <span class="st">"violent"</span>, <span class="st">"fatal"</span>, <span class="st">"in_custody"</span>, <span class="st">"unintentional_discharge"</span>, <span class="st">"injured"</span>, <span class="st">"deceased"</span>, <span class="st">"serials"</span>],</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>messages <span class="op">=</span> [</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"role"</span>: <span class="st">"system"</span>, <span class="st">"content"</span>: <span class="st">"You are a helpful assistant that extracts summaries of LAPD newsroom articles as JSON for a database."</span>},</span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: <span class="st">'Extract a summary from the following article: '</span> <span class="op">+</span> text}</span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> openai.ChatCompletion.create(</span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">'gpt-3.5-turbo-0613'</span>, functions<span class="op">=</span>functions, messages<span class="op">=</span>messages)</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(response.choices[<span class="dv">0</span>][<span class="st">'message'</span>][<span class="st">'function_call'</span>][<span class="st">'arguments'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And the output? Well, it’s quite magical:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"date"</span>: <span class="st">"October 29, 2018"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"violent"</span>: true,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"fatal"</span>: true,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"in_custody"</span>: false,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"unintentional_discharge"</span>: false,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"injured"</span>: [<span class="st">"Officer Edward Agdeppa"</span>],</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"deceased"</span>: [<span class="st">"Albert Ramon Dorsey"</span>],</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"serials"</span>: [<span class="dv">41000</span>]</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This sort of approach could really work! There would be some more legwork involved in grabbing the URLs (past and present) of the biggest self-storage firms but that doesn’t seem insurmountable because the internet archive is well structured.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>We’ve looked at four possible ways to answer how the number of self-storage facilities in the UK is changing over time. What’s amazing is that this information, which anyone could find out by driving round the country a bit, is so hard to get at. While self-storage facilities happened to be the topic of interest, the same applies to lots of other data that could be used to answer 100s of questions of relevance to the UK, so having ways to do this seems important.</p>
+<p>In this example, only one route seems feasible: scraping firm websites with the help of the excellent internet archive and either a lot of manual graft or a highly experimental using a large language model!</p>
+<p>Maybe I missed a way to get hold of this data? I’ll update the post if you can tell me other strategies. As for the LLM-approach we’ve found, I’m tempted to try it, and maybe you are too? Let me know!</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><em>Safestore</em> has 130 sites on its website, while OSM finds only 38, so this isn’t just a problem with <em>Big Yellow Self-Storage</em>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>A similar exercise for <a href="https://web.archive.org/web/20110102193907/http://www.safestore.co.uk/default.aspx"><em>SafeStore</em></a> shows 90 locations in 2011, and <a href="https://web.archive.org/web/20160206185739/https://www.safestore.co.uk/">over 100 by 2016</a> but only one from OSM in 2017.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>ESCOE and ONS have done some great work trying to turn the IDBR into a longitudinal business database; check out the working paper <a href="https://escoe-website.s3.amazonaws.com/wp-content/uploads/2020/10/15063641/ESCoE-DP-2020-14.pdf">here</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Some data firms, such as Glass.AI, have specialised in firm website data so they may have some better ideas as to how to do this.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

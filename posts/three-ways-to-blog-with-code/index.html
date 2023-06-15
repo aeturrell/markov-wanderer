@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Turrell">
+<meta name="dcterms.date" content="2021-02-12">
+
+<title>Markov Wanderer - Three ways to blog with code</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Markov Wanderer - Three ways to blog with code">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://aeturrell.github.io/markov-wanderer/posts/three-ways-to-blog-with-code/index_files/figure-html/cell-4-output-1.svg">
+<meta name="twitter:creator" content="@arthurturrell">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Markov Wanderer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="http://aeturrell.github.io/home/" rel="" target=""><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/aeturrell" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/arthurturrell" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Three ways to blog with code</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">blogging</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Arthur Turrell </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 12, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#test-blog-post" id="toc-test-blog-post" class="nav-link active" data-scroll-target="#test-blog-post">Test blog post</a></li>
+  <li><a href="#the-three-ways" id="toc-the-three-ways" class="nav-link" data-scroll-target="#the-three-ways">The three ways</a>
+  <ul class="collapse">
+  <li><a href="#jupyter-notebooks" id="toc-jupyter-notebooks" class="nav-link" data-scroll-target="#jupyter-notebooks">Jupyter Notebooks</a></li>
+  <li><a href="#codebraid" id="toc-codebraid" class="nav-link" data-scroll-target="#codebraid">Codebraid</a></li>
+  <li><a href="#rmarkdown" id="toc-rmarkdown" class="nav-link" data-scroll-target="#rmarkdown">Rmarkdown</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#verbatim-blog-post-file-contents" id="toc-verbatim-blog-post-file-contents" class="nav-link" data-scroll-target="#verbatim-blog-post-file-contents">Verbatim blog post file contents</a>
+  <ul class="collapse">
+  <li><a href="#jupyter-notebook" id="toc-jupyter-notebook" class="nav-link" data-scroll-target="#jupyter-notebook">Jupyter Notebook</a></li>
+  <li><a href="#codebraid-1" id="toc-codebraid-1" class="nav-link" data-scroll-target="#codebraid-1">Codebraid</a></li>
+  <li><a href="#rmarkdown-1" id="toc-rmarkdown-1" class="nav-link" data-scroll-target="#rmarkdown-1">Rmarkdown</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Typically, what I want to do when I create a blog post is to combine text, code, and code output, and then push it to the github repo that hosts my website. But what are the options, and which of them is the best (at least for my purposes)?</p>
+<p>The objective is to take a mixture of markdown and code, execute the code, and ensure the outputs from that code (eg images) are linked to in a ‘final’ version of the markdown (let’s call it an executed version) that can easily be uploaded to github pages via a static site generator.</p>
+<p>I’ll look at three ways to do this: Jupyter Notebooks, Codebraid, and Rmarkdown.</p>
+<p>Let’s take a very simple blog post as the test case, with the quality of the output and success on the following tasks our metric of success:</p>
+<ul>
+<li>write and execute some code</li>
+<li>write some text</li>
+<li>execute some code that produces an image and includes it using the markdown <code>! [] (dir/to/img.png)</code> syntax; and</li>
+<li>execute some code in-line with text.</li>
+</ul>
+<p>Here’s the contents that we’ll run in each case before exporting to executed markdown (note that it won’t show any outputs because it hasn’t been executed-in fact this will be, somewhat ironically, a code-output free blog post!):</p>
+<section id="test-blog-post" class="level3">
+<h3 class="anchored" data-anchor-id="test-blog-post">Test blog post</h3>
+<p>This is a <em>very</em> approximate recreation of XKCD comic number 2419, <a href="https://xkcd.com/2419/">Hug Count</a>.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy.random <span class="im">import</span> Generator, PCG64</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>seed_for_prng <span class="op">=</span> <span class="dv">78557</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>prng <span class="op">=</span> Generator(PCG64(seed_for_prng))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(prng.integers(<span class="dv">20</span>, <span class="dv">30</span>, size<span class="op">=</span>(<span class="dv">2022</span><span class="op">-</span><span class="dv">1995</span>, <span class="dv">1</span>)),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                  columns<span class="op">=</span>[<span class="st">'Hugs'</span>],</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                  index<span class="op">=</span><span class="bu">range</span>(<span class="dv">1995</span>, <span class="dv">2022</span>))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>df.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Hugs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2017</td>
+<td>27</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2018</td>
+<td>24</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2019</td>
+<td>21</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2020</td>
+<td>26</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2021</td>
+<td>23</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Now we need to adjust the last entry downwards to reflect the unfortunate lack of hugs since coronavirus:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="dv">2020</span>:<span class="dv">2022</span>, <span class="st">'Hugs'</span>] <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s print the last number in-line: <code>3</code>.</p>
+<p>Finally, let’s create the image.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib_inline.backend_inline</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>matplotlib_inline.backend_inline.set_matplotlib_formats(<span class="st">"svg"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> plt.xkcd():</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'right'</span>].set_color(<span class="st">'none'</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'top'</span>].set_color(<span class="st">'none'</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    df.plot.bar(ax<span class="op">=</span>ax)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    ax.get_legend().remove()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'Estimated Number of Distinct People Hugged Per Year'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-4-output-1.svg" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Hugs chart, after XKCD</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-three-ways" class="level2">
+<h2 class="anchored" data-anchor-id="the-three-ways">The three ways</h2>
+<section id="jupyter-notebooks" class="level3">
+<h3 class="anchored" data-anchor-id="jupyter-notebooks">Jupyter Notebooks</h3>
+<p>From a Jupyter Notebook server running the .ipynb in a browser window (launch with <code>jupyter notebook</code> in the command line), choose File-&gt;Download As-&gt;Markdown to get a zip file that contains an executed markdown with outputs and a separate image file that is linked to from the markdown file. The automatic inclusion of images works really well. One major drawback of this approach is that there is no way to execute in-line code.</p>
+<p>Although it has been requested as a feature, there’s no way to go from .ipynb to executed markdown in VS Code (though VS Code is a great Jupyter Notebook IDE in many other ways). This is a shame as VS Code is my go-to IDE.</p>
+<p>Pros:</p>
+<ul>
+<li>Images auto-linked</li>
+<li>Lots of great extensions for Jupyter notebooks</li>
+<li>Shows how the final outputs will look (because you can execute as you go)</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>Doesn’t play that nicely with version control</li>
+<li>Cannot integrate code and text; blocks must be one or another</li>
+<li>Requires an IDE that can read .ipynb files</li>
+</ul>
+</section>
+<section id="codebraid" class="level3">
+<h3 class="anchored" data-anchor-id="codebraid">Codebraid</h3>
+<p><a href="https://github.com/gpoore/codebraid">Codebraid</a> is a really great package with a smorgasbord of features such as in-line code execution within paragraphs, no requirement for markdown preprocessor commands, minimal diffs for easy version control, the ability to insert code output anywhere in a document, and the ability to use multiple languages (and even multiple sessions) within a single document. All very impressive.</p>
+<p>Like knitr for rmarkdown, it makes use of the excellent pandoc under the hood. To call it, you use</p>
+<pre><code>codebraid pandoc &lt;normal pandoc options&gt; --overwrite</code></pre>
+<p>on the command line. To get an executable Python block, the syntax for just getting the output of the code is</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python .cb.run}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="st">'Hello from *Python!*'</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>whereas to get the code <em>and</em> the output it’s</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python .cb.nb}</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="st">'Hello from *Python!*'</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(x)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Additional options are available via the show argument, eg <code>{.python .cb.nb} show=code+stdout:raw+stderr</code>, shows the code, the raw output, and any errors.</p>
+<p>Displaying in-line code or output is possible. Use in-line code with <code>.cb.run</code>, e.g.</p>
+<pre><code>`print(1 + 2)`{{.python .cb.run}}</code></pre>
+<p>Running in-line code with <code>.cb.expr</code> evaluates an expression and then inserts the raw output into the document, where it is interpreted as Markdown. Inline code with <code>.cb.nb</code> (<code>nb</code> is short for <code>notebook</code>) is similar, except output is shown verbatim.</p>
+<p>Images can be included automatically, just as is the case with Jupyter Notebook export, <em>except</em> that you must specify that you want to use a jupyter kernel rather than a pure language kernel. <code>{.python .cb.nb jupyter_kernel=python3}</code> is what you’d run in the first code block, but you can use <code>{.python .cb.nb}</code> in subsequent blocks (whether in-line or not).</p>
+<p>Apart from all that, the only other thing you need to do is add a title, e.g.</p>
+<pre><code>
+---
+title: "Codebraid blog post example"
+---
+</code></pre>
+<p>Codebraid works really, really well with a jupyter kernel. The figures are included automatically, in-line rendering is possible, and you have a lot of options on output. Its creator has clearly but a lot of work into it. The only real downside is that you cannot see the outputs except in the executed and exported markdown, unlike in a Jupyter Notebook. I dare say that a clever VS Code extension could create a live preview, which would be fantastic to see.</p>
+<p>Pros:</p>
+<ul>
+<li>First class cross-language support</li>
+<li>In-line code execution</li>
+<li>Great with version control</li>
+<li>Works with any text editor</li>
+<li>Lots of control over outputs</li>
+<li>Images auto-linked</li>
+<li>Uses a plain markdown .md file</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>Doesn’t show how the final outputs will look</li>
+<li>In some cases, exported markdown files may contains less common markdown syntax features, such as triple colons, that may not be rendered by all markdown viewers (it may be possible to turn these off)</li>
+</ul>
+</section>
+<section id="rmarkdown" class="level3">
+<h3 class="anchored" data-anchor-id="rmarkdown">Rmarkdown</h3>
+<p>The way Rmarkdown (a file format that’s a fancy version of markdown), RStudio, and the package knitr work together is so great that I’m surprised it hasn’t caught on more. When it works, it really is brilliant.</p>
+<p>Part of the reason why it hasn’t is probably because it’s pretty tightly bound with just one language (R), unlike Ju(lia)py(thon)(te)R notebooks, which covers three, and Codebraid, which covers those three plus Rust, Javascript, and bash. That, and you’re strongly tied to both R and RStudio to get the magic preview of what the output will look like. That’s not to say you cannot run Python or Julia in rmarkdown documents; you can, but they’re not first class citizens and I’ve heard stories about both big slowdowns relative to using those languages natively and that some things just don’t work at all. That said, for writing a blog post with a few lines of Python or Julia in, rmarkdown is a viable option, and it’s a really strong option for R.</p>
+<p>Like Codebraid, rmarkdown + knitr use pandoc to achieve their magic, though pandoc’s role is a bit more hidden (it doesn’t appear in the command; in fact, you click a button that says <code>knitr</code> or <code>Preview</code>). When you create a new rmarkdown document in RStudio, you get options for output in HTML, PDF, or Word. But, of course, we know that pandoc is involved-and so that there are many more output formats available! In this case, we want to get an executed markdown script. The way to get this to happen is to adapt the header at the top of a newly created rmarkdown document to have output set to <code>md_document</code> as follows</p>
+<pre><code>
+---
+title: "your title"
+output: md_document
+---
+</code></pre>
+<p>I wasn’t able to get the preview of Python chunks working–the in-document code-chunk preview button said that pandas was not installed (as if!). However, the output did work when I used the export to markdown option (the button to do this is, confusingly, labelled <code>Preview</code> but it’s the <code>Preview</code> that appears on the bar at the top of the document rather than <em>within</em> the document). Furthermore, the in-line code chunks do not seem to work with anything other than R.</p>
+<p>Pros:</p>
+<ul>
+<li>Fantastic preview of how the final outputs will look when using RStudio</li>
+<li>Great with version control</li>
+<li>Almost uses a plain markdown file (it looks like plain markdown, but the extension is .rmd)</li>
+<li>Excellent if you’re using R</li>
+<li>Images auto-linked (although through HTML rather than markdown)</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>Most of the best features do not work with other languages: eg preview and in-line code</li>
+<li>Not so easy to use outside of RStudio</li>
+<li>Markdown export hidden</li>
+<li>Python support only through R’s <code>reticulate</code> package, which seems slow and is fiddly to connect to virtual environments</li>
+</ul>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Jupyter Notebooks are great if you don’t mind the well-known fussyness around version control and the cumbersome file format. The preview of output that you naturally get by running cells is perhaps the strongest feature. Plus, you get lots of other great features of Jupyter Notebooks, including the many possible extensions, and a choice of several IDEs, including Visual Studio Code and JupyterLab. No in-line code, however.</p>
+<p>Rmarkdown + knitr + RStudio works well for R (with a bit of fiddling to get markdown out instead of, say, html) but it’s just not good enough for other languages yet and it’s very much tied into the RStudio ecosystem. The best feature is the live preview as you execute individual chunks-but again, that’s only for R.</p>
+<p>Codebraid is, for me, the stand out tool. It does everything you could ever want across every language you could ever want with ease <em>except</em> for one very important feature that’s missing: the ability to see a live preview. This isn’t really a failing of the Codebraid library of course; in the case of the other two, we’re really combining a file format with a file viewer whereas Codebraid is just the file format and a command line tool. So, if, say, Visual Studio Code introduced a live preview of Codebraid markdown (before execution), then it would be superior to the other options for all purposes in my view. As it is, it’s still the best all rounder and, for most blog posts that I do, I can see myself using either Codebraid or Jupyter Notebooks. It has an edge on the latter when it comes to in-line code, multiple languages simultaneously, and a less fussy file format (it’s just markdown rather than JSON).</p>
+</section>
+<section id="verbatim-blog-post-file-contents" class="level2">
+<h2 class="anchored" data-anchor-id="verbatim-blog-post-file-contents">Verbatim blog post file contents</h2>
+<p>These are in case you want to try this out for yourself.</p>
+<section id="jupyter-notebook" class="level3">
+<h3 class="anchored" data-anchor-id="jupyter-notebook">Jupyter Notebook</h3>
+<pre class="text"><code>{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This is a *very* approximate recreation of XKCD comic number 2419, [Hug Count](https://xkcd.com/2419/)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "\n",
+    "from numpy.random import Generator, PCG64\n",
+    "seed_for_prng = 78557\n",
+    "prng = Generator(PCG64(seed_for_prng))\n",
+    "\n",
+    "\n",
+    "df = pd.DataFrame(prng.integers(20, 30, size=(2022-1995, 1)),\n",
+    "                  columns=['Hugs'],\n",
+    "                  index=range(1995, 2022))\n",
+    "df.tail()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now we need to adjust the last entry downwards to reflect the unfortunate lack of hugs since coronavirus:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df.loc[2020:2022, 'Hugs'] = [5, 3]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's print the last number in-line (cannot do this in Jupyter Notebook).\n",
+    "\n",
+    "Finally, let's create the image."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "with plt.xkcd():\n",
+    "    fig, ax = plt.subplots()\n",
+    "    ax.spines['right'].set_color('none')\n",
+    "    ax.spines['top'].set_color('none')\n",
+    "    df.plot.bar(ax=ax)\n",
+    "    ax.get_legend().remove()\n",
+    "    ax.set_title('Estimated Number of Distinct People Hugged Per Year')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3.7.6 64-bit ('base': conda)",
+   "language": "python",
+   "name": "python37664bitbaseconda6d7b358218c047dcab3fb2cff66062fa"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}</code></pre>
+<p>This can be executed by pressing ‘run’ in an IDE. In the Jupyter Notebook IDE, you should then use the export to markdown option (under file-&gt;download as).</p>
+</section>
+<section id="codebraid-1" class="level3">
+<h3 class="anchored" data-anchor-id="codebraid-1">Codebraid</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Codebraid blog post example"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>This is a *very* approximate recreation of XKCD comic number 2419, <span class="co">[</span><span class="ot">Hug Count</span><span class="co">](https://xkcd.com/2419/)</span>.</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python .cb.nb jupyter_kernel=python3}</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy.random <span class="im">import</span> Generator, PCG64</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>seed_for_prng <span class="op">=</span> <span class="dv">78557</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>prng <span class="op">=</span> Generator(PCG64(seed_for_prng))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(prng.integers(<span class="dv">20</span>, <span class="dv">30</span>, size<span class="op">=</span>(<span class="dv">2022</span><span class="op">-</span><span class="dv">1995</span>, <span class="dv">1</span>)),</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>                  columns<span class="op">=</span>[<span class="st">'Hugs'</span>],</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                  index<span class="op">=</span><span class="bu">range</span>(<span class="dv">1995</span>, <span class="dv">2022</span>))</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>df.tail()</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>Now we need to adjust the last entry downwards to reflect the unfortunate lack of hugs since coronavirus:</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="in">```{python .cb.nb}</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="dv">2020</span>:<span class="dv">2022</span>, <span class="st">'Hugs'</span>] <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">3</span>]</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>Let's print the last number in-line <span class="in">`print(df.iloc[-1, -1])`</span>{.python .cb.run}.</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>Finally, let's create the image.</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="in">```{.python .cb.nb}</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> plt.xkcd():</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'right'</span>].set_color(<span class="st">'none'</span>)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'top'</span>].set_color(<span class="st">'none'</span>)</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    df.plot.bar(ax<span class="op">=</span>ax)</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    ax.get_legend().remove()</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'Estimated Number of Distinct People Hugged Per Year'</span>)</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then run <code>codebraid pandoc -s in.md -o out.md</code> on the command line, assuming you have codebraid and pandoc installed, and that you name the above file ‘in.md’.</p>
+</section>
+<section id="rmarkdown-1" class="level3">
+<h3 class="anchored" data-anchor-id="rmarkdown-1">Rmarkdown</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "three_rmd"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="an">output:</span><span class="co"> md_document</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup, include=FALSE}</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>This is a *very* approximate recreation of XKCD comic number 2419, <span class="co">[</span><span class="ot">Hug Count</span><span class="co">](https://xkcd.com/2419/)</span>.</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy.random <span class="im">import</span> Generator, PCG64</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>seed_for_prng <span class="op">=</span> <span class="dv">78557</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>prng <span class="op">=</span> Generator(PCG64(seed_for_prng))</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(prng.integers(<span class="dv">20</span>, <span class="dv">30</span>, size<span class="op">=</span>(<span class="dv">2022</span><span class="op">-</span><span class="dv">1995</span>, <span class="dv">1</span>)),</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>                  columns<span class="op">=</span>[<span class="st">'Hugs'</span>],</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>                  index<span class="op">=</span><span class="bu">range</span>(<span class="dv">1995</span>, <span class="dv">2022</span>))</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.tail())</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>Now we need to adjust the last entry downwards to reflect the unfortunate lack of hugs since coronavirus:</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>df.loc[<span class="dv">2020</span>:<span class="dv">2022</span>, <span class="st">'Hugs'</span>] <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">3</span>]</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>Let's print the last number in-line (not possible with Rmarkdown).</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>Finally, let's create the image.</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> plt.xkcd():</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'right'</span>].set_color(<span class="st">'none'</span>)</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">'top'</span>].set_color(<span class="st">'none'</span>)</span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>    df.plot.bar(ax<span class="op">=</span>ax)</span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>    ax.get_legend().remove()</span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="st">'Estimated Number of Distinct People Hugged Per Year'</span>)</span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In RStudio, changing <code>output: html</code> to <code>output: md_document</code> tells knitr to use markdown. Then hit the preview button <em>at the top</em> of the document, which actually creates an output markdown file.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

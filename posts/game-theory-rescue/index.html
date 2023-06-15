@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Turrell">
+<meta name="dcterms.date" content="2018-07-11">
+
+<title>Markov Wanderer - Why the latest, most exciting thing in machine learning is… game theory</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Markov Wanderer - Why the latest, most exciting thing in machine learning is… game theory">
+<meta name="twitter:description" content="">
+<meta name="twitter:creator" content="@arthurturrell">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Markov Wanderer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="http://aeturrell.github.io/home/" rel="" target=""><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/aeturrell" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/arthurturrell" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Why the latest, most exciting thing in machine learning is… game theory</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">research</div>
+                <div class="quarto-category">machine-learning</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Arthur Turrell </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 11, 2018</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#shapley-values" id="toc-shapley-values" class="nav-link active" data-scroll-target="#shapley-values">Shapley values</a></li>
+  <li><a href="#shapley-values-for-machine-learning" id="toc-shapley-values-for-machine-learning" class="nav-link" data-scroll-target="#shapley-values-for-machine-learning">Shapley values for machine learning</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><em>And when I say latest, this particular method was invented in 1953.</em></p>
+<p>Machine learning has interpretability issues. New EU legislation, the General Data Protection Regulation, includes a <a href="https://www.privacy-regulation.eu/en/r71.htm">line</a> about “the right … to obtain an explanation of the decision reached”, including by an algorithm.</p>
+<p>Of course, there are many other good reasons to want the decisions of algorithms to be understandable and explainable. Interrogating why an algorithm makes the choices it does can highlight whether <a href="https://medium.com/@jrzech/what-are-radiological-deep-learning-models-actually-learning-f97a546c5b98">it’s working as intended</a>, and, in some situations - such as public policy - transparency and interpretability may be essential ingredients of decision making.</p>
+<p>But non-linear models are just not that easy to decompose into their fundamental components, they are - to an extent - a ‘black box’. Ideally, we would be able to find the contribution of each input feature to the final prediction. In linear models, this is trivially achieved by the combination of the level of a feature and its regression coefficient. That is, for a linear model <span class="math inline">\(f\)</span> with features <span class="math inline">\(x_{i\nu}\)</span>, <span class="math inline">\(\nu \in \{1,p\}\)</span> at a point <span class="math inline">\(i\)</span> such that</p>
+<p><span class="math display">\[
+{f}(x_{i\cdot})={f}(x_{i1},\ldots,x_{ip})=\beta_0+\beta_{1}x_{i1}+\ldots+\beta_{p}x_{ip}
+\]</span></p>
+<p>the contribution from feature <span class="math inline">\(\nu\)</span> is <span class="math inline">\(x_{i\nu}\cdot\beta_\nu\)</span>. In non-linear models, it’s not so simple.</p>
+<section id="shapley-values" class="level3">
+<h3 class="anchored" data-anchor-id="shapley-values">Shapley values</h3>
+<p>Game theory to the rescue. In 1953 Lloyd Shapley introduced values which effectively find, for a co-operative game, each player’s marginal contribution, averaged over every possible sequence in which the players could have been added to the group of players (Alvin Roth talks about it <a href="https://voxeu.org/article/ideas-lloyd-shapley">here</a>). These are called Shapley values and, in a nutshell, they are the average expected marginal contribution of one player after all possible combinations of players have been considered.</p>
+<p>This is exactly the kind of problem we want to solve to understand how different features contribute to a predicted value in a non-linear model, for instance in a machine learning. But it’s easier to understand them in the linear case. The Shapley value for the linear model above would be, for feature <span class="math inline">\(\nu\)</span>:</p>
+<p><span class="math display">\[
+\phi_{i\nu}({f})=\beta_{\nu}x_{i\nu}-E(\beta_{\nu}X_{\nu})=\beta_{\nu}x_{i\nu}-\beta_{\nu}E(X_{\nu})
+\]</span></p>
+<p>where no Einstein summation is implied. Summing over the different features gets back a number which is simply related to the overall prediction given by <span class="math inline">\(f\)</span>,</p>
+<p><span class="math display">\[
+\sum_{\nu=1}^{p}\phi_{i\nu}({f})={f}(x_{i\cdot})-E({f}(X))
+\]</span></p>
+<p>The general equation for Shapley values looks more complicated, but is described by a function <span class="math inline">\(g\)</span> that assigns a real number to each coalition <span class="math inline">\(S\)</span>, that is, to each subset of the combination of features, such that <span class="math inline">\(g(S)\)</span> represents the amount (of money or of utility) that coalition <span class="math inline">\(S\)</span> is able to transfer among its members in any way that they all agree to. Here it is:</p>
+<p><span class="math display">\[
+\phi_{i\nu}(f)=\sum_{S\subseteq\{x_{i1},\ldots,x_{ip}\}\setminus\{x_{i\nu}\}}\frac{|S|!\left(p-|S|-1\right)!}{p!}\underbrace{\left[g_{\left(S\cup\{x_{i\nu}\}\right)}\left(S\cup\{x_{i\nu}\}\right)-g_S(S)\right]}_{\text{Marginal contribution}}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+g_{x_i}(S)=\int{f}(x_{i1},\ldots,x_{ip})d\mathbb{P}_{X_{i\cdot}\notin{}S}-E_X({f}(X))
+\]</span></p>
+</section>
+<section id="shapley-values-for-machine-learning" class="level3">
+<h3 class="anchored" data-anchor-id="shapley-values-for-machine-learning">Shapley values for machine learning</h3>
+<p>Shapley values have a number of nice properties which are both familiar from linear decompositions/linear models and highly desirable for machine learning models:</p>
+<ul>
+<li><p>the Shapley value contributions sum to the difference between the full prediction and the average prediction (efficiency)</p></li>
+<li><p>two features which contribute equally to any subset to which they’re added have the same Shapley value (substitutability/symmetry)</p></li>
+<li><p>a feature which doesn’t influence the predicted value has a Shapley value of 0 (dummy player)</p></li>
+</ul>
+<p>These nice properties are not trivial for non-linear models, and Shapley values are the <a href="http://www.lamsade.dauphine.fr/~airiau/Teaching/CoopGames/2011/coopgames-7%5B8up%5D.pdf">only way to achieve them concurrently</a>. They’re also what suggest to me that Shapley values will become the primary interpretability method used and understood. There must be some catch, right?</p>
+<p>There is. Which is why other methods, such as local surrogate models like <a href="https://github.com/marcotcr/lime">LIME</a>, are not going away anytime soon. If the factorials and sum over all combinations of input features in the equation didn’t give it away, Shapley values are computationally expensive. As <a href="https://link.springer.com/article/10.1007%2FBF01258278">this paper</a> points out, “every exact algorithm for the Shapley value requires an exponential number of operations”. Oh dear.</p>
+<p>The good news is that there are <a href="https://www.sciencedirect.com/science/article/pii/S0004370208000696?via%3Dihub">good approximations</a> out there. The even better news is that there is a <a href="https://github.com/slundberg/shap">Python library</a> called <code>shap</code> which implements a fast approximation method, is easy to use, and is even optimised for <code>sklearn</code>. The paper behind this is <a href="http://papers.nips.cc/paper/7062-a-unified-approach-to-interpreting-model-predictions">here</a>.</p>
+<p>Not everyone is convinced by Shapley values but I think they could be particularly important as they have properties which are so clearly and neatly analogous to decompositions of linear models.</p>
+<p>If you’d like to find out more about how Shapley values work, see these excellent explainer blog posts which I drew on heavily for this post:</p>
+<ul>
+<li><a href="https://towardsdatascience.com/one-feature-attribution-method-to-supposedly-rule-them-all-shapley-values-f3e04534983d">One Feature Attribution Method to (Supposedly) Rule Them All: Shapley Values</a></li>
+<li><a href="https://christophm.github.io/interpretable-ml-book/shapley.html">Interpretable machine learning: Shapley Value Explanations</a></li>
+<li><a href="https://voxeu.org/article/ideas-lloyd-shapley">Lloyd Shapley: A founding giant of game theory</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

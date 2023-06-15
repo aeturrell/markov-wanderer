@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Turrell">
+<meta name="dcterms.date" content="2018-05-05">
+
+<title>Markov Wanderer - Econometrics in Python Part IV - Running many regressions alongside pandas</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Markov Wanderer - Econometrics in Python Part IV - Running many regressions alongside pandas">
+<meta name="twitter:description" content="">
+<meta name="twitter:creator" content="@arthurturrell">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Markov Wanderer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="http://aeturrell.github.io/home/" rel="" target=""><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/aeturrell" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/arthurturrell" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Econometrics in Python Part IV - Running many regressions alongside pandas</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">econometrics</div>
+                <div class="quarto-category">python</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Arthur Turrell </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 5, 2018</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#loading-the-data" id="toc-loading-the-data" class="nav-link active" data-scroll-target="#loading-the-data">Loading the data</a></li>
+  <li><a href="#defining-functions-to-run-regressions" id="toc-defining-functions-to-run-regressions" class="nav-link" data-scroll-target="#defining-functions-to-run-regressions">Defining functions to run regressions</a></li>
+  <li><a href="#putting-it-all-together" id="toc-putting-it-all-together" class="nav-link" data-scroll-target="#putting-it-all-together">Putting it all together</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><em>The fourth in the series of posts covering econometrics in Python. This time: automating the boring business of running multiple regressions on columns in a pandas dataframe.</em></p>
+<p>Data science in Python <em>is</em> the open source package <a href="https://pandas.pydata.org/">pandas</a>, more or less. It’s an amazing, powerful library and the firms, researchers, and governments who use it are indebted to its maintainers, including <a href="http://wesmckinney.com/">Wes McKinney</a>.</p>
+<p>When data arrive in your Python code, they’re most likely going to arrive in a pandas dataframe. If you’re doing econometrics, you’re then likely to want to do regressions from the dataframe with the minimum of fuss and the maximum of flexibility. This post sets out a way to do that with a few extra functions.</p>
+<p>There are two main ways to run regressions in Python: <a href="https://www.statsmodels.org/stable/index.html">statsmodels</a> or <a href="http://scikit-learn.org/stable/">scikit-learn</a>. The latter is more geared toward machine learning, so I’ll be using the former for regressions. The typical way to do this might be the following (ignoring imports and data importing), with a pandas dataframe <code>df</code> with an x-variable ‘concrete’ and a y-variable ‘age’:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mod <span class="op">=</span> sm.OLS(df[<span class="st">'Age'</span>],df[<span class="st">'Concrete'</span>])</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> mod.fit()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                    Age   R-squared:                       0.414
+Model:                            OLS   Adj. R-squared:                  0.414
+Method:                 Least Squares   F-statistic:                     728.1
+Date:                     05 May 2018   Prob (F-statistic):          1.05e-121
+Time:                        00:00:00   Log-Likelihood:                -5672.3
+No. Observations:                1030   AIC:                         1.135e+04
+Df Residuals:                    1029   BIC:                         1.135e+04
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Concrete       1.2693      0.047     26.984      0.000       1.177       1.362
+==============================================================================
+Omnibus:                      761.497   Durbin-Watson:                   0.998
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             9916.238
+Skew:                           3.411   Prob(JB):                         0.00
+Kurtosis:                      16.584   Cond. No.                         1.00
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</code></pre>
+<p>In the rest of this post I will outline a more flexible and extensible way of doing this, which will allow for multiple models and controls, with code snippets you can copy, paste, and then forget about.</p>
+<section id="loading-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-the-data">Loading the data</h2>
+<p>Our data are on the compressive strength of concrete - I know, brilliant, and we could talk more about the <a href="https://www.npr.org/2012/02/17/147047553/concretes-role-as-a-building-block-in-history">fascinating history of concrete</a> and its <a href="https://www.bbc.co.uk/programmes/p04gyg20">importance for the economy</a>, but we should get to the stats. The data are from the UC Irvine Machine Learning datasets repository; <a href="http://archive.ics.uci.edu/ml/datasets/Concrete+Compressive+Strength">see here for them</a>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_excel(<span class="st">'concrete_data.xls'</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>   Cement (component 1)(kg in a m^3 mixture)  \
+0                                      540.0   
+1                                      540.0   
+2                                      332.5   
+3                                      332.5   
+4                                      198.6   
+
+   Blast Furnace Slag (component 2)(kg in a m^3 mixture)  \
+0                                                0.0       
+1                                                0.0       
+2                                              142.5       
+3                                              142.5       
+4                                              132.4       
+
+   Fly Ash (component 3)(kg in a m^3 mixture)  \
+0                                         0.0   
+1                                         0.0   
+2                                         0.0   
+3                                         0.0   
+4                                         0.0   
+
+   Water  (component 4)(kg in a m^3 mixture)  \
+0                                      162.0   
+1                                      162.0   
+2                                      228.0   
+3                                      228.0   
+4                                      192.0   
+
+   Superplasticizer (component 5)(kg in a m^3 mixture)  \
+0                                                2.5     
+1                                                2.5     
+2                                                0.0     
+3                                                0.0     
+4                                                0.0     
+
+   Coarse Aggregate  (component 6)(kg in a m^3 mixture)  \
+0                                             1040.0      
+1                                             1055.0      
+2                                              932.0      
+3                                              932.0      
+4                                              978.4      
+
+   Fine Aggregate (component 7)(kg in a m^3 mixture)  Age (day)  \
+0                                              676.0         28   
+1                                              676.0         28   
+2                                              594.0        270   
+3                                              594.0        365   
+4                                              825.5        360   
+
+   Concrete compressive strength(MPa, megapascals)   
+0                                         79.986111  
+1                                         61.887366  
+2                                         40.269535  
+3                                         41.052780  
+4                                         44.296075  </code></pre>
+<p>Those column names are rather long! I’ll just take the first word of each column name, and take a quick look at the data:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.rename(columns<span class="op">=</span><span class="bu">dict</span>(<span class="bu">zip</span>(df.columns,[x.split()[<span class="dv">0</span>] <span class="cf">for</span> x <span class="kw">in</span> df.columns])))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>            Cement        Blast          Fly        Water  Superplasticizer  \
+count  1030.000000  1030.000000  1030.000000  1030.000000       1030.000000   
+mean    281.165631    73.895485    54.187136   181.566359          6.203112   
+std     104.507142    86.279104    63.996469    21.355567          5.973492   
+min     102.000000     0.000000     0.000000   121.750000          0.000000   
+25%     192.375000     0.000000     0.000000   164.900000          0.000000   
+50%     272.900000    22.000000     0.000000   185.000000          6.350000   
+75%     350.000000   142.950000   118.270000   192.000000         10.160000   
+max     540.000000   359.400000   200.100000   247.000000         32.200000   
+
+            Coarse         Fine          Age     Concrete  
+count  1030.000000  1030.000000  1030.000000  1030.000000  
+mean    972.918592   773.578883    45.662136    35.817836  
+std      77.753818    80.175427    63.169912    16.705679  
+min     801.000000   594.000000     1.000000     2.331808  
+25%     932.000000   730.950000     7.000000    23.707115  
+50%     968.000000   779.510000    28.000000    34.442774  
+75%    1029.400000   824.000000    56.000000    46.136287  
+max    1145.000000   992.600000   365.000000    82.599225  </code></pre>
+</section>
+<section id="defining-functions-to-run-regressions" class="level2">
+<h2 class="anchored" data-anchor-id="defining-functions-to-run-regressions">Defining functions to run regressions</h2>
+<p>Let’s set up a function which we can pass a dataframe to in order to run regressions on selected columns:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> RegressionOneModel(df,Xindvars,Yvar,summary<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="bu">type</span>(Yvar)<span class="op">==</span><span class="bu">str</span>):</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        Yvar<span class="op">=</span>[Yvar]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="bu">len</span>(Yvar)<span class="op">!=</span><span class="dv">1</span>):</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Error: please enter a single y variable"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.nan</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        xf <span class="op">=</span> df.dropna(subset<span class="op">=</span>Yvar<span class="op">+</span>Xindvars)[Xindvars<span class="op">+</span>Yvar]</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        Xexog <span class="op">=</span> xf[Xindvars]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> sm.OLS(xf[Yvar].dropna(),Xexog)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        reg <span class="op">=</span> model.fit()</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(summary):</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> reg.summary2()</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> reg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>How this does work? It’s easiest to show with an example.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>regResults <span class="op">=</span> RegressionOneModel(df,[<span class="st">'Cement'</span>,<span class="st">'Blast'</span>],<span class="st">'Concrete'</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(regResults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>                 Results: Ordinary least squares
+==================================================================
+Model:              OLS              Adj. R-squared:     0.878    
+Dependent Variable: Concrete         AIC:                8332.8955
+Date:               2018-05-05 00:00 BIC:                8342.7701
+No. Observations:   1030             Log-Likelihood:     -4164.4  
+Df Model:           2                F-statistic:        3705.    
+Df Residuals:       1028             Prob (F-statistic): 0.00     
+R-squared:          0.878            Scale:              190.64   
+---------------------------------------------------------------------
+          Coef.     Std.Err.       t       P&gt;|t|     [0.025    0.975]
+---------------------------------------------------------------------
+Cement    0.1079      0.0017    63.4736    0.0000    0.1046    0.1113
+Blast     0.0671      0.0045    14.9486    0.0000    0.0583    0.0760
+------------------------------------------------------------------
+Omnibus:               7.719        Durbin-Watson:           0.983
+Prob(Omnibus):         0.021        Jarque-Bera (JB):        6.461
+Skew:                  0.117        Prob(JB):                0.040
+Kurtosis:              2.690        Condition No.:           3    
+==================================================================</code></pre>
+<p>This function takes a variable number of X vectors and regresses Y (‘concrete’) on them. But what if we want to run many regressions at once? Fortunately <code>statsmodels</code> has some capability to do this. Unfortunately, it’s not all that intuitive and, to use it with ease, we’ll need to extend. I want it to be flexible enough so that it: - works with X as a string, list, or a list of lists (for multiple models) - accepts a number of controls which are the same in every model - returns either a multi-model regression results summary or a single model summary as appropriate</p>
+<p>To make this all work, we need a couple of extra functions. One just labels different models with Roman numerals and could be jettisoned. The other one is just a quick way of combining the variables to send to the regression.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> write_roman(num):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    roman <span class="op">=</span> OrderedDict()</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">1000</span>] <span class="op">=</span> <span class="st">"M"</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">900</span>] <span class="op">=</span> <span class="st">"CM"</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">500</span>] <span class="op">=</span> <span class="st">"D"</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">400</span>] <span class="op">=</span> <span class="st">"CD"</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">100</span>] <span class="op">=</span> <span class="st">"C"</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">90</span>] <span class="op">=</span> <span class="st">"XC"</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">50</span>] <span class="op">=</span> <span class="st">"L"</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">40</span>] <span class="op">=</span> <span class="st">"XL"</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">10</span>] <span class="op">=</span> <span class="st">"X"</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">9</span>] <span class="op">=</span> <span class="st">"IX"</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">5</span>] <span class="op">=</span> <span class="st">"V"</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">4</span>] <span class="op">=</span> <span class="st">"IV"</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    roman[<span class="dv">1</span>] <span class="op">=</span> <span class="st">"I"</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> roman_num(num):</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> roman.keys():</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>            x, y <span class="op">=</span> <span class="bu">divmod</span>(num, r)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> roman[r] <span class="op">*</span> x</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>            num <span class="op">-=</span> (r <span class="op">*</span> x)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> num <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>                roman_num(num)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">""</span>.join([a <span class="cf">for</span> a <span class="kw">in</span> roman_num(num)])</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> combineVarsList(X,Z,combine):</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(combine):</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> X<span class="op">+</span>Z</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, there is a function which decides how to call the underlying regression code, and which stitches the results from different models together:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> RunRegression(df,XX,y,Z<span class="op">=</span>[<span class="st">''</span>]):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If XX is not a list of lists, make it one -</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># - first by checking if type is string</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="bu">type</span>(XX)<span class="op">==</span><span class="bu">str</span>):  <span class="co"># Check if it is one string</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        XX <span class="op">=</span> [XX]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>     <span class="co"># - second for if it is a list</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="kw">not</span>(<span class="bu">any</span>(<span class="bu">isinstance</span>(el, <span class="bu">list</span>) <span class="cf">for</span> el <span class="kw">in</span> XX))):</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        XX <span class="op">=</span> [XX]</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="bu">type</span>(y)<span class="op">!=</span><span class="bu">str</span>): <span class="co"># Check y for string</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">'Error: please enter string for dependent variable'</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.nan</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    title_string <span class="op">=</span> <span class="st">'OLS Regressions; dependent variable '</span><span class="op">+</span>y</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If Z is not a list, make it one</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="bu">type</span>(Z)<span class="op">==</span><span class="bu">str</span>):</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        Z <span class="op">=</span> [Z]</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#XX = np.array(XX)</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check whether there is just a single model to run</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="bu">len</span>(XX)<span class="op">==</span><span class="dv">1</span>):</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        Xpassvars <span class="op">=</span> <span class="bu">list</span>(XX[<span class="dv">0</span>])</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(<span class="bu">len</span>(Z[<span class="dv">0</span>])<span class="op">!=</span><span class="dv">0</span>):</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>             Xpassvars <span class="op">=</span> <span class="bu">list</span>(XX[<span class="dv">0</span>])<span class="op">+</span>Z</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        regRes <span class="op">=</span> RegressionOneModel(df,Xpassvars,[y],summary<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        regResSum2 <span class="op">=</span> regRes.summary2()</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>        regResSum2.add_title(title_string)</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> regResSum2</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span>(<span class="bu">len</span>(XX)<span class="op">&gt;</span><span class="dv">1</span>):</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Load in Z here if appropriate</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>        addControls <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(<span class="bu">len</span>(Z[<span class="dv">0</span>])<span class="op">!=</span><span class="dv">0</span>):</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>             addControls <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Case with multiple models</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>        info_dict<span class="op">=</span>{<span class="st">'R-squared'</span> : <span class="kw">lambda</span> x: <span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>.<span class="bu">format</span>(x.rsquared),</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>               <span class="st">'Adj. R-squared'</span> : <span class="kw">lambda</span> x: <span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>.<span class="bu">format</span>(x.rsquared_adj),</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>               <span class="st">'No. observations'</span> : <span class="kw">lambda</span> x: <span class="st">"</span><span class="sc">{0:d}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="bu">int</span>(x.nobs))}</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>        regsVec <span class="op">=</span> [RegressionOneModel(df,combineVarsList(X,Z,addControls),</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>                                              [y],summary<span class="op">=</span><span class="va">False</span>) <span class="cf">for</span> X <span class="kw">in</span> XX]</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>        model_names_strList <span class="op">=</span> [<span class="st">'Model '</span><span class="op">+\</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>                           write_roman(i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="bu">len</span>(XX)<span class="op">+</span><span class="dv">1</span>)]</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>        float_format_str <span class="op">=</span> <span class="st">'</span><span class="sc">%0.2f</span><span class="st">'</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>        uniqueVars <span class="op">=</span> np.unique([item <span class="cf">for</span> sublist <span class="kw">in</span> XX <span class="cf">for</span> item <span class="kw">in</span> sublist])</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>        uniqueVars <span class="op">=</span> [<span class="bu">str</span>(x) <span class="cf">for</span> x <span class="kw">in</span> uniqueVars]</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>        results_table <span class="op">=</span> summary_col(results<span class="op">=</span>regsVec,</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>                                float_format<span class="op">=</span>float_format_str,</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>                                stars <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>                                model_names<span class="op">=</span>model_names_strList,</span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>                                info_dict<span class="op">=</span>info_dict,</span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>                                regressor_order<span class="op">=</span>uniqueVars<span class="op">+</span>Z)</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>        results_table.add_title(title_string)</span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> results_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="putting-it-all-together" class="level2">
+<h2 class="anchored" data-anchor-id="putting-it-all-together">Putting it all together</h2>
+<p>Let’s see how it works. Firstly, the simple case of one y on one x.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>regResults <span class="op">=</span> RunRegression(df,<span class="st">'Blast'</span>,<span class="st">'Concrete'</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(regResults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>           OLS Regressions; dependent variable Concrete
+==================================================================
+Model:              OLS              Adj. R-squared:     0.400    
+Dependent Variable: Concrete         AIC:                9971.8287
+Date:               2018-05-05 00:00 BIC:                9976.7660
+No. Observations:   1030             Log-Likelihood:     -4984.9  
+Df Model:           1                F-statistic:        688.0    
+Df Residuals:       1029             Prob (F-statistic): 1.57e-116
+R-squared:          0.401            Scale:              936.87   
+---------------------------------------------------------------------
+          Coef.     Std.Err.       t       P&gt;|t|     [0.025    0.975]
+---------------------------------------------------------------------
+Blast     0.2203      0.0084    26.2293    0.0000    0.2038    0.2367
+------------------------------------------------------------------
+Omnibus:               39.762       Durbin-Watson:          0.477
+Prob(Omnibus):         0.000        Jarque-Bera (JB):       43.578
+Skew:                  -0.502       Prob(JB):               0.000
+Kurtosis:              3.081        Condition No.:          1     
+==================================================================</code></pre>
+<p>Or several x variables:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>regResults <span class="op">=</span> RunRegression(df,[<span class="st">'Cement'</span>,<span class="st">'Blast'</span>],<span class="st">'Concrete'</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(regResults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>           OLS Regressions; dependent variable Concrete
+==================================================================
+Model:              OLS              Adj. R-squared:     0.878    
+Dependent Variable: Concrete         AIC:                8332.8955
+Date:               2018-05-05 00:00 BIC:                8342.7701
+No. Observations:   1030             Log-Likelihood:     -4164.4  
+Df Model:           2                F-statistic:        3705.    
+Df Residuals:       1028             Prob (F-statistic): 0.00     
+R-squared:          0.878            Scale:              190.64   
+---------------------------------------------------------------------
+          Coef.     Std.Err.       t       P&gt;|t|     [0.025    0.975]
+---------------------------------------------------------------------
+Cement    0.1079      0.0017    63.4736    0.0000    0.1046    0.1113
+Blast     0.0671      0.0045    14.9486    0.0000    0.0583    0.0760
+------------------------------------------------------------------
+Omnibus:               7.719        Durbin-Watson:           0.983
+Prob(Omnibus):         0.021        Jarque-Bera (JB):        6.461
+Skew:                  0.117        Prob(JB):                0.040
+Kurtosis:              2.690        Condition No.:           3    
+==================================================================</code></pre>
+<p>Here comes the fun - to run multiple models, we need only pass a list of lists as the X variable in the function:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Model_1_X <span class="op">=</span> [<span class="st">'Cement'</span>, <span class="st">'Blast'</span>]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>Model_2_X <span class="op">=</span> [<span class="st">'Coarse'</span>,<span class="st">'Fine'</span>]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>Model_3_X <span class="op">=</span> [<span class="st">'Fly'</span>, <span class="st">'Water'</span>]</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>ManyModelResults <span class="op">=</span> RunRegression(df,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                                 [Model_1_X,Model_2_X,Model_3_X],</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'Concrete'</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ManyModelResults)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>OLS Regressions; dependent variable Concrete
+===========================================
+                 Model I Model II Model III
+-------------------------------------------
+Blast            0.07***                   
+                 (0.00)                    
+Cement           0.11***                   
+                 (0.00)                    
+Coarse                   0.03***           
+                         (0.00)            
+Fine                     0.01***           
+                         (0.00)            
+Fly                               0.00     
+                                  (0.01)   
+Water                             0.19***  
+                                  (0.00)   
+R-squared        0.88    0.81     0.78     
+Adj. R-squared   0.88    0.81     0.78     
+No. observations 1030    1030     1030     
+===========================================
+Standard errors in parentheses.
+* p&lt;.1, ** p&lt;.05, ***p&lt;.01</code></pre>
+<p>There’s a keyword argument, <code>Z</code>, which we can pass controls (here just ‘Age’) via:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ManyModelsWControl <span class="op">=</span> RunRegression(df,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                                 [Model_1_X,Model_2_X,Model_3_X],</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'Concrete'</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                 Z <span class="op">=</span> <span class="st">'Age'</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ManyModelsWControl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>OLS Regressions; dependent variable Concrete
+===========================================
+                 Model I Model II Model III
+-------------------------------------------
+Blast            0.05***                   
+                 (0.00)                    
+Cement           0.08***                   
+                 (0.00)                    
+Coarse                   0.03***           
+                         (0.00)            
+Fine                     -0.01**           
+                         (0.00)            
+Fly                               -0.06***
+                                  (0.01)   
+Water                             0.12***  
+                                  (0.00)   
+Age              0.10*** 0.11***  0.10***  
+                 (0.01)  (0.01)   (0.01)   
+Superplasticizer 1.04*** 1.44***  1.84***  
+                 (0.06)  (0.08)   (0.08)   
+R-squared        0.92    0.87     0.88     
+Adj. R-squared   0.92    0.87     0.87     
+No. observations 1030    1030     1030     
+===========================================
+Standard errors in parentheses.
+* p&lt;.1, ** p&lt;.05, ***p&lt;.01</code></pre>
+<p>Finally, it’s easy to pass multiple controls:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ManyModelsWControls <span class="op">=</span> RunRegression(df,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                                 [Model_1_X,Model_2_X,Model_3_X],</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'Concrete'</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                                 Z <span class="op">=</span> [<span class="st">'Age'</span>,<span class="st">'Superplasticizer'</span>])</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ManyModelsWControls)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>OLS Regressions; dependent variable Concrete
+===========================================
+                 Model I Model II Model III
+-------------------------------------------
+Blast            0.05***                   
+                 (0.00)                    
+Cement           0.08***                   
+                 (0.00)                    
+Coarse                   0.03***           
+                         (0.00)            
+Fine                     -0.01**           
+                         (0.00)            
+Fly                               -0.06***
+                                  (0.01)   
+Water                             0.12***  
+                                  (0.00)   
+Age              0.10*** 0.11***  0.10***  
+                 (0.01)  (0.01)   (0.01)   
+Superplasticizer 1.04*** 1.44***  1.84***  
+                 (0.06)  (0.08)   (0.08)   
+R-squared        0.92    0.87     0.88     
+Adj. R-squared   0.92    0.87     0.87     
+No. observations 1030    1030     1030     
+===========================================
+Standard errors in parentheses.
+* p&lt;.1, ** p&lt;.05, ***p&lt;.01</code></pre>
+<p>By the way, the statsmodels summary object which is returned here has an .as_latex() method - useful if you want to dump results straight into papers.</p>
+<p>Do you have a better way to quickly run many different kinds of OLS regressions from a pandas dataframe? Get in touch!</p>
+<p><em>NB: I had to remove the doc strings in the above code because they slowed down the page a lot.</em></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

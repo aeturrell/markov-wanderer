@@ -1,0 +1,58 @@
+[
+  {
+    "listing": "/archive.html",
+    "items": [
+      "/posts/data-science-maturity/data-science-maturity.html",
+      "/posts/managing-public-sector-knowledge/managing-public-sector-knowledge.html",
+      "/posts/why-you-shouldnt-code/why-you-shouldnt-code.html",
+      "/posts/the-prize-with-apis/the-prize-with-apis.html",
+      "/posts/til-how-to-break-xml/index.html",
+      "/posts/welcome/index.html",
+      "/posts/visual-studio-code-in-the-cloud/index.html",
+      "/posts/research-blogs/index.html",
+      "/posts/setting-up-r-in-vscode/index.html",
+      "/posts/three-ways-to-blog-with-code/index.html",
+      "/posts/10-lesser-known-python-packages/index.html",
+      "/posts/get-organised/index.html",
+      "/posts/specification-curve-analysis/index.html",
+      "/posts/wikipedia-into-stem/index.html",
+      "/posts/left-out-of-he/index.html",
+      "/posts/game-theory-rescue/index.html",
+      "/posts/running-many-regressions-alongside-pandas/index.html",
+      "/posts/estimation-heterogeneous-treatment-random-forests/index.html",
+      "/posts/econometrics-in-python-partii-fixed-effects/index.html",
+      "/posts/econometrics-in-python-parti-ml/index.html",
+      "/posts/publication-quality-plots-in-python/index.html",
+      "/posts/ons-api/index.html",
+      "/posts/better-narrative-on-narratives/index.html"
+    ]
+  },
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/data-science-maturity/data-science-maturity.html",
+      "/posts/managing-public-sector-knowledge/managing-public-sector-knowledge.html",
+      "/posts/why-you-shouldnt-code/why-you-shouldnt-code.html",
+      "/posts/the-prize-with-apis/the-prize-with-apis.html",
+      "/posts/til-how-to-break-xml/index.html",
+      "/posts/welcome/index.html",
+      "/posts/visual-studio-code-in-the-cloud/index.html",
+      "/posts/research-blogs/index.html",
+      "/posts/setting-up-r-in-vscode/index.html",
+      "/posts/three-ways-to-blog-with-code/index.html",
+      "/posts/10-lesser-known-python-packages/index.html",
+      "/posts/get-organised/index.html",
+      "/posts/specification-curve-analysis/index.html",
+      "/posts/wikipedia-into-stem/index.html",
+      "/posts/left-out-of-he/index.html",
+      "/posts/game-theory-rescue/index.html",
+      "/posts/running-many-regressions-alongside-pandas/index.html",
+      "/posts/estimation-heterogeneous-treatment-random-forests/index.html",
+      "/posts/econometrics-in-python-partii-fixed-effects/index.html",
+      "/posts/econometrics-in-python-parti-ml/index.html",
+      "/posts/publication-quality-plots-in-python/index.html",
+      "/posts/ons-api/index.html",
+      "/posts/better-narrative-on-narratives/index.html"
+    ]
+  }
+]

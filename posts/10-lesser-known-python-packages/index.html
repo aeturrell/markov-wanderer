@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Turrell">
+<meta name="dcterms.date" content="2020-10-24">
+
+<title>Markov Wanderer - 10 less well-known Python packages</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Markov Wanderer - 10 less well-known Python packages">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://pythonawesome.com/content/images/2020/08/wrong_brackets.gif">
+<meta name="twitter:creator" content="@arthurturrell">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Markov Wanderer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="http://aeturrell.github.io/home/" rel="" target=""><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/aeturrell" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/arthurturrell" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">10 less well-known Python packages</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">open-source</div>
+                <div class="quarto-category">python</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Arthur Turrell </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 24, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#jazzit" id="toc-jazzit" class="nav-link active" data-scroll-target="#jazzit">1. Jazzit</a>
+  <ul class="collapse">
+  <li><a href="#example-of-jazzit" id="toc-example-of-jazzit" class="nav-link" data-scroll-target="#example-of-jazzit">Example of Jazzit</a></li>
+  </ul></li>
+  <li><a href="#handcalcs" id="toc-handcalcs" class="nav-link" data-scroll-target="#handcalcs">2. Handcalcs</a>
+  <ul class="collapse">
+  <li><a href="#example-of-handcalcs" id="toc-example-of-handcalcs" class="nav-link" data-scroll-target="#example-of-handcalcs">Example of handcalcs</a></li>
+  </ul></li>
+  <li><a href="#matplotlib" id="toc-matplotlib" class="nav-link" data-scroll-target="#matplotlib">3. Matplotlib!?</a>
+  <ul class="collapse">
+  <li><a href="#example-of-matplotlib-mosaics" id="toc-example-of-matplotlib-mosaics" class="nav-link" data-scroll-target="#example-of-matplotlib-mosaics">Example of matplotlib mosaics</a></li>
+  </ul></li>
+  <li><a href="#pandas-profiling" id="toc-pandas-profiling" class="nav-link" data-scroll-target="#pandas-profiling">4. Pandas profiling</a>
+  <ul class="collapse">
+  <li><a href="#example-of-pandas-profiling" id="toc-example-of-pandas-profiling" class="nav-link" data-scroll-target="#example-of-pandas-profiling">Example of pandas profiling</a></li>
+  </ul></li>
+  <li><a href="#pandera-data-validation" id="toc-pandera-data-validation" class="nav-link" data-scroll-target="#pandera-data-validation">5. Pandera data validation</a>
+  <ul class="collapse">
+  <li><a href="#example-of-pandera" id="toc-example-of-pandera" class="nav-link" data-scroll-target="#example-of-pandera">Example of pandera</a></li>
+  </ul></li>
+  <li><a href="#tenacity" id="toc-tenacity" class="nav-link" data-scroll-target="#tenacity">6. Tenacity</a>
+  <ul class="collapse">
+  <li><a href="#example-of-tenacity" id="toc-example-of-tenacity" class="nav-link" data-scroll-target="#example-of-tenacity">Example of Tenacity</a></li>
+  </ul></li>
+  <li><a href="#streamlit" id="toc-streamlit" class="nav-link" data-scroll-target="#streamlit">7. Streamlit</a></li>
+  <li><a href="#black" id="toc-black" class="nav-link" data-scroll-target="#black">8. Black</a>
+  <ul class="collapse">
+  <li><a href="#live-demo" id="toc-live-demo" class="nav-link" data-scroll-target="#live-demo">Live demo</a></li>
+  </ul></li>
+  <li><a href="#pyinstrument-for-profiling-code" id="toc-pyinstrument-for-profiling-code" class="nav-link" data-scroll-target="#pyinstrument-for-profiling-code">9. Pyinstrument for profiling code</a>
+  <ul class="collapse">
+  <li><a href="#example-of-pyinstrument" id="toc-example-of-pyinstrument" class="nav-link" data-scroll-target="#example-of-pyinstrument">Example of Pyinstrument</a></li>
+  </ul></li>
+  <li><a href="#pyinstrument-for-profiling-code-1" id="toc-pyinstrument-for-profiling-code-1" class="nav-link" data-scroll-target="#pyinstrument-for-profiling-code-1">9. Pyinstrument for profiling code</a>
+  <ul class="collapse">
+  <li><a href="#example-of-pyinstrument-1" id="toc-example-of-pyinstrument-1" class="nav-link" data-scroll-target="#example-of-pyinstrument-1">Example of Pyinstrument</a></li>
+  </ul></li>
+  <li><a href="#alive-progress" id="toc-alive-progress" class="nav-link" data-scroll-target="#alive-progress">10. Alive progress</a>
+  <ul class="collapse">
+  <li><a href="#see-also-tdqm" id="toc-see-also-tdqm" class="nav-link" data-scroll-target="#see-also-tdqm">See also: tdqm</a></li>
+  <li><a href="#live-demo-of-alive-progress" id="toc-live-demo-of-alive-progress" class="nav-link" data-scroll-target="#live-demo-of-alive-progress">Live demo of alive progress</a></li>
+  <li><a href="#bonus-r-style-analysis-in-python" id="toc-bonus-r-style-analysis-in-python" class="nav-link" data-scroll-target="#bonus-r-style-analysis-in-python">Bonus: R-style analysis in Python!?</a>
+  <ul class="collapse">
+  <li><a href="#plotnine" id="toc-plotnine" class="nav-link" data-scroll-target="#plotnine">Plotnine</a></li>
+  <li><a href="#siuba" id="toc-siuba" class="nav-link" data-scroll-target="#siuba">Siuba</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>(Remember that to use these, you will need to run <code>pip install packagename</code> on the command line.)</p>
+<section id="jazzit" class="level2">
+<h2 class="anchored" data-anchor-id="jazzit">1. Jazzit</h2>
+<p>Sound on for this one. Jazzit’s docs say: &gt; “Ever wanted your scripts to play music while running/ on erroring out? Of course you didn’t. But here it is anyway”.</p>
+<p>Yes, this package laughs at you when you get a runtime error – but can also celebrate your success when the code runs. Apart from being good fun, this package demonstrates how the decorator function <code>@</code> is used.</p>
+<p>See also: <a href="https://pypi.org/project/beepy/">beepy</a></p>
+<section id="example-of-jazzit" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-jazzit">Example of Jazzit</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> jazzit <span class="im">import</span> error_track, success_track</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">@error_track</span>(<span class="st">"curb_your_enthusiasm.mp3"</span>, wait<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run():</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">0</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>run()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="text"><code>Traceback (most recent call last):
+  File "/opt/anaconda3/envs/noodling/lib/python3.8/site-packages/jazzit/jazz.py", line 47, in wrapped_function
+    original_func(*args)
+  File "/var/folders/x6/ffnr59f116l96_y0q0bjfz7c0000gn/T/ipykernel_89075/4032939987.py", line 5, in run
+    print(1/0)
+ZeroDivisionError: division by zero</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">@success_track</span>(<span class="st">"anime-wow.mp3"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a,b):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(a<span class="op">+</span>b)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>add(<span class="dv">10</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="text"><code>15</code></pre>
+</section>
+</section>
+<section id="handcalcs" class="level2">
+<h2 class="anchored" data-anchor-id="handcalcs">2. Handcalcs</h2>
+<p>In research, you often find yourself coding up maths and then transcribing the same maths into text (usually via typesetting language Latex). This is bad practice; do not repeat yourself suggests you should write the maths once, and once alone. Handcalcs helps with this: it can render maths in the console and export to latex equations.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://pythonawesome.com/content/images/2020/08/wrong_brackets.gif" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">The Handcalcs package</figcaption>
+</figure>
+</div>
+<p>See also: if you want to solve, render, and export latex equations, you should try out <a href="https://www.sympy.org/en/index.html">sympy</a>, a fully fledged library for symbolic mathematics (think Maple).</p>
+<section id="example-of-handcalcs" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-handcalcs">Example of handcalcs</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> handcalcs.render</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To render maths, just use the <code>%%render</code> magic keyword. If you’re running in an enviroment that doesn’t have a Latex installation, this will just show Latex – if you want the Latex, use the <code>%%tex</code> magic keyword instead. But in a Jupyter notebook on a machine with Latex installed, the <code>%%render</code> magic will render the maths into beautifully typeset equations:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>render</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> sqrt(<span class="dv">2</span><span class="op">*</span>a <span class="op">+</span> b<span class="op">/</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+[
+<span class="math display">\[\begin{aligned}
+a &amp;= 2 \;
+\\[10pt]
+b &amp;= 3 \;
+\\[10pt]
+c &amp;= \sqrt { 2 \cdot a + \frac{ b }{ 3 } }  = \sqrt { 2 \cdot 2 + \frac{ 3 }{ 3 } } &amp;= 2.236  
+\end{aligned}\]</span>
+<p>]</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>tex</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> sqrt(<span class="dv">2</span><span class="op">*</span>a <span class="op">+</span> b<span class="op">/</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>\[
+\begin{aligned}
+a &amp;= 2 \; 
+\\[10pt]
+b &amp;= 3 \; 
+\\[10pt]
+c &amp;= \sqrt { 2 \cdot a + \frac{ b }{ 3 } }  = \sqrt { 2 \cdot 2 + \frac{ 3 }{ 3 } } &amp;= 2.236  
+\end{aligned}
+\]</code></pre>
+</section>
+</section>
+<section id="matplotlib" class="level2">
+<h2 class="anchored" data-anchor-id="matplotlib">3. Matplotlib!?</h2>
+<p>Alright, you’ve probably heard of matplotlib and might be surprised to see it on this list. But there’s a nice new feature of matplotlib that you might not be aware of: placement using ASCII art. It’s more useful than it sounds.</p>
+<p>Sometimes (especially for science papers), you need a weird arrangement of panels within a figure. Specifying that so that it’s exactly right is a big pain. This is where the new matplotlib mosiac subplot option comes in.</p>
+<p>Note that you may need to restart the runtime after you have pip installed matplotlib below.</p>
+<p>See also: if you like declarative plotting that’s web-friendly and extremely high quality, <a href="https://altair-viz.github.io/">Altair</a> is definitely worth your time.</p>
+<section id="example-of-matplotlib-mosaics" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-matplotlib-mosaics">Example of matplotlib mosaics</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>axd <span class="op">=</span> plt.figure(constrained_layout<span class="op">=</span><span class="va">True</span>).subplot_mosaic(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"""</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">    TTE</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="st">    L.E</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="st">    """</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, ax <span class="kw">in</span> axd.items():</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    ax.text(<span class="fl">0.5</span>, <span class="fl">0.5</span>, k,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'center'</span>, fontsize<span class="op">=</span><span class="dv">36</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            color<span class="op">=</span><span class="st">'darkgrey'</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="10_less_img_16.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Output using matplotlib mosiacs</figcaption>
+</figure>
+</div>
+<p>But it’s not just ASCII that you can use, lists work too:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>axd <span class="op">=</span> plt.figure(constrained_layout<span class="op">=</span><span class="va">True</span>).subplot_mosaic(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    [[<span class="st">'.'</span>, <span class="st">'histx'</span>],</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>     [<span class="st">'histy'</span>, <span class="st">'scat'</span>]]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, ax <span class="kw">in</span> axd.items():</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    ax.text(<span class="fl">0.5</span>, <span class="fl">0.5</span>, k,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>            ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'center'</span>, fontsize<span class="op">=</span><span class="dv">36</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>            color<span class="op">=</span><span class="st">'darkgrey'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="10_less_img_18.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Specifying the mosaic in a different way.</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="pandas-profiling" class="level2">
+<h2 class="anchored" data-anchor-id="pandas-profiling">4. Pandas profiling</h2>
+<p>Any tool that can make the process of understanding input data is very welcome, which is why the <a href="https://pandas-profiling.github.io/pandas-profiling/docs/master/rtd/">pandas profiling</a> library is such a breath of fresh air. It automates, or at least facilitates, the first stage of exploratory data analysis.</p>
+<p>What pandas profiling does is to render a HTML or ipywidget report (or JSON string) of the datatset - including missing variables, cardinality, distributions, and correlations. From what I’ve seen, it’s really comprehensive and user-friendly—though I have noticed that the default configuration does not scale well to very large datasets.</p>
+<p>Due to the large size of the reports, I won’t run one in this notebook, although you can with <code>profile.to_notebook_iframe()</code>, but instead link to a gif demoing the package.</p>
+<p>See also: <a href="https://github.com/fbdesignpro/sweetviz">SweetViz</a></p>
+<section id="example-of-pandas-profiling" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-pandas-profiling">Example of pandas profiling</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandas_profiling <span class="im">import</span> ProfileReport</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># To run the profile report use:</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>profile <span class="op">=</span> ProfileReport(data, title<span class="op">=</span><span class="st">"Titanic Dataset"</span>, html<span class="op">=</span>{<span class="st">'style'</span>: {<span class="st">'full_width'</span>: <span class="va">True</span>}})</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># To display in a notebook:</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>profile.to_notebook_iframe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://pandas-profiling.ydata.ai/docs/master/_images/iframe.gif" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">An example of pandas profiling output</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="pandera-data-validation" class="level2">
+<h2 class="anchored" data-anchor-id="pandera-data-validation">5. Pandera data validation</h2>
+<p>Sometimes you want to validate data, not just explore it. A number of packages have popped up to help do this recently. <a href="https://pandera.readthedocs.io/en/stable/">Pandera</a> is geared towards pandas dataframes and validation within a file or notebook. It can be used to check that a given dataframe has the data that you’d expect.</p>
+<p>See also: <a href="https://docs.greatexpectations.io/en/latest/">Great Expectations</a>, which produces HTML reports a bit like our number 3. featured above. Great Expectations looks really rich and suitable for production, coming as it does with a command line interface.</p>
+<section id="example-of-pandera" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-pandera">Example of pandera</h3>
+<p>Let’s start with a dataframe that passes muster.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandera <span class="im">as</span> pa</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># data to validate</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"column1"</span>: [<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">9</span>],</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"column2"</span>: [<span class="op">-</span><span class="fl">1.3</span>, <span class="op">-</span><span class="fl">1.4</span>, <span class="op">-</span><span class="fl">2.9</span>, <span class="op">-</span><span class="fl">10.1</span>, <span class="op">-</span><span class="fl">20.4</span>],</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"column3"</span>: [<span class="st">"value_1"</span>, <span class="st">"value_2"</span>, <span class="st">"value_3"</span>, <span class="st">"value_2"</span>, <span class="st">"value_1"</span>],</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># define schema</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>schema <span class="op">=</span> pa.DataFrameSchema({</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"column1"</span>: pa.Column(<span class="bu">int</span>, checks<span class="op">=</span>pa.Check.less_than_or_equal_to(<span class="dv">10</span>)),</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"column2"</span>: pa.Column(<span class="bu">float</span>, checks<span class="op">=</span>pa.Check.less_than(<span class="op">-</span><span class="fl">1.2</span>)),</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"column3"</span>: pa.Column(<span class="bu">str</span>, checks<span class="op">=</span>[</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>        pa.Check.str_startswith(<span class="st">"value_"</span>),</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># define custom checks as functions that take a series as input and</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># outputs a boolean or boolean Series</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        pa.Check(<span class="kw">lambda</span> s: s.<span class="bu">str</span>.split(<span class="st">"_"</span>, expand<span class="op">=</span><span class="va">True</span>).shape[<span class="dv">1</span>] <span class="op">==</span> <span class="dv">2</span>)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    ]),</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>validated_df <span class="op">=</span> schema(df)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(validated_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>   column1  column2  column3
+0        1     -1.3  value_1
+1        4     -1.4  value_2
+2        0     -2.9  value_3
+3       10    -10.1  value_2
+4        9    -20.4  value_1</code></pre>
+<p>This passed, as expected. But now let’s try the same schema with data that shouldn’t pass by changing the first value of the second column to be greater than -1.2:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"column1"</span>: [<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">9</span>],</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"column2"</span>: [<span class="dv">22</span>, <span class="op">-</span><span class="fl">1.4</span>, <span class="op">-</span><span class="fl">2.9</span>, <span class="op">-</span><span class="fl">10.1</span>, <span class="op">-</span><span class="fl">20.4</span>],</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"column3"</span>: [<span class="st">"value_1"</span>, <span class="st">"value_2"</span>, <span class="st">"value_3"</span>, <span class="st">"value_2"</span>, <span class="st">"value_1"</span>],</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>validated_df <span class="op">=</span> schema(df)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(validated_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>---------------------------------------------------------------------------
+
+SchemaError                               Traceback (most recent call last)
+
+Input In [11], in &lt;module&gt;
+      1 df = pd.DataFrame({
+      2     "column1": [1, 4, 0, 10, 9],
+      3     "column2": [22, -1.4, -2.9, -10.1, -20.4],
+      4     "column3": ["value_1", "value_2", "value_3", "value_2", "value_1"],
+      5 })
+----&gt; 7 validated_df = schema(df)
+      8 print(validated_df)
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schemas.py:768, in DataFrameSchema.__call__(self, dataframe, head, tail, sample, random_state, lazy, inplace)
+    740 def __call__(
+    741     self,
+    742     dataframe: pd.DataFrame,
+   (...)
+    748     inplace: bool = False,
+    749 ):
+    750     """Alias for :func:`DataFrameSchema.validate` method.
+    751 
+    752     :param pd.DataFrame dataframe: the dataframe to be validated.
+   (...)
+    766         otherwise creates a copy of the data.
+    767     """
+--&gt; 768     return self.validate(
+    769         dataframe, head, tail, sample, random_state, lazy, inplace
+    770     )
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schemas.py:503, in DataFrameSchema.validate(self, check_obj, head, tail, sample, random_state, lazy, inplace)
+    490     check_obj = check_obj.map_partitions(
+    491         self._validate,
+    492         head=head,
+   (...)
+    498         meta=check_obj,
+    499     )
+    501     return check_obj.pandera.add_schema(self)
+--&gt; 503 return self._validate(
+    504     check_obj=check_obj,
+    505     head=head,
+    506     tail=tail,
+    507     sample=sample,
+    508     random_state=random_state,
+    509     lazy=lazy,
+    510     inplace=inplace,
+    511 )
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schemas.py:677, in DataFrameSchema._validate(self, check_obj, head, tail, sample, random_state, lazy, inplace)
+    675     check_results.append(check_utils.is_table(result))
+    676 except errors.SchemaError as err:
+--&gt; 677     error_handler.collect_error("schema_component_check", err)
+    678 except errors.SchemaErrors as err:
+    679     for schema_error_dict in err.schema_errors:
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/error_handlers.py:32, in SchemaErrorHandler.collect_error(self, reason_code, schema_error, original_exc)
+     26 """Collect schema error, raising exception if lazy is False.
+     27 
+     28 :param reason_code: string representing reason for error
+     29 :param schema_error: ``SchemaError`` object.
+     30 """
+     31 if not self._lazy:
+---&gt; 32     raise schema_error from original_exc
+     34 # delete data of validated object from SchemaError object to prevent
+     35 # storing copies of the validated DataFrame/Series for every
+     36 # SchemaError collected.
+     37 del schema_error.data
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schemas.py:669, in DataFrameSchema._validate(self, check_obj, head, tail, sample, random_state, lazy, inplace)
+    667 for schema_component in schema_components:
+    668     try:
+--&gt; 669         result = schema_component(
+    670             df_to_validate,
+    671             lazy=lazy,
+    672             # don't make a copy of the data
+    673             inplace=True,
+    674         )
+    675         check_results.append(check_utils.is_table(result))
+    676     except errors.SchemaError as err:
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schemas.py:2004, in SeriesSchemaBase.__call__(self, check_obj, head, tail, sample, random_state, lazy, inplace)
+   1993 def __call__(
+   1994     self,
+   1995     check_obj: Union[pd.DataFrame, pd.Series],
+   (...)
+   2001     inplace: bool = False,
+   2002 ) -&gt; Union[pd.DataFrame, pd.Series]:
+   2003     """Alias for ``validate`` method."""
+-&gt; 2004     return self.validate(
+   2005         check_obj, head, tail, sample, random_state, lazy, inplace
+   2006     )
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schema_components.py:223, in Column.validate(self, check_obj, head, tail, sample, random_state, lazy, inplace)
+    219             validate_column(
+    220                 check_obj[column_name].iloc[:, [i]], column_name
+    221             )
+    222     else:
+--&gt; 223         validate_column(check_obj, column_name)
+    225 return check_obj
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schema_components.py:196, in Column.validate.&lt;locals&gt;.validate_column(check_obj, column_name)
+    195 def validate_column(check_obj, column_name):
+--&gt; 196     super(Column, copy(self).set_name(column_name)).validate(
+    197         check_obj,
+    198         head,
+    199         tail,
+    200         sample,
+    201         random_state,
+    202         lazy,
+    203         inplace=inplace,
+    204     )
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schemas.py:1962, in SeriesSchemaBase.validate(self, check_obj, head, tail, sample, random_state, lazy, inplace)
+   1956     check_results.append(
+   1957         _handle_check_results(
+   1958             self, check_index, check, check_obj, *check_args
+   1959         )
+   1960     )
+   1961 except errors.SchemaError as err:
+-&gt; 1962     error_handler.collect_error("dataframe_check", err)
+   1963 except Exception as err:  # pylint: disable=broad-except
+   1964     # catch other exceptions that may occur when executing the
+   1965     # Check
+   1966     err_msg = f'"{err.args[0]}"' if len(err.args) &gt; 0 else ""
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/error_handlers.py:32, in SchemaErrorHandler.collect_error(self, reason_code, schema_error, original_exc)
+     26 """Collect schema error, raising exception if lazy is False.
+     27 
+     28 :param reason_code: string representing reason for error
+     29 :param schema_error: ``SchemaError`` object.
+     30 """
+     31 if not self._lazy:
+---&gt; 32     raise schema_error from original_exc
+     34 # delete data of validated object from SchemaError object to prevent
+     35 # storing copies of the validated DataFrame/Series for every
+     36 # SchemaError collected.
+     37 del schema_error.data
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schemas.py:1957, in SeriesSchemaBase.validate(self, check_obj, head, tail, sample, random_state, lazy, inplace)
+   1954 for check_index, check in enumerate(self.checks):
+   1955     try:
+   1956         check_results.append(
+-&gt; 1957             _handle_check_results(
+   1958                 self, check_index, check, check_obj, *check_args
+   1959             )
+   1960         )
+   1961     except errors.SchemaError as err:
+   1962         error_handler.collect_error("dataframe_check", err)
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/pandera/schemas.py:2353, in _handle_check_results(schema, check_index, check, check_obj, *check_args)
+   2351         warnings.warn(error_msg, UserWarning)
+   2352         return True
+-&gt; 2353     raise errors.SchemaError(
+   2354         schema,
+   2355         check_obj,
+   2356         error_msg,
+   2357         failure_cases=failure_cases,
+   2358         check=check,
+   2359         check_index=check_index,
+   2360         check_output=check_result.check_output,
+   2361     )
+   2362 return check_result.check_passed
+
+
+SchemaError: &lt;Schema Column(name=column2, type=DataType(float64))&gt; failed element-wise validator 0:
+&lt;Check less_than: less_than(-1.2)&gt;
+failure cases:
+   index  failure_case
+0      0          22.0</code></pre>
+<p>As expected, this throws a “schema error” that is informative about what went wrong and what value caused it. Finding ‘bad’ data is the first step in cleaning it up, so this library and the others like it that are appearing could be really useful.</p>
+</section>
+</section>
+<section id="tenacity" class="level2">
+<h2 class="anchored" data-anchor-id="tenacity">6. Tenacity</h2>
+<p>If at first you don’t succeed, try and try again. <a href="https://tenacity.readthedocs.io/en/latest/">Tenacity</a> has several options to keep trying a function, even if execution fails. The names of the available function decorators give a clear indication as to what they do – <code>retry</code>, <code>stop_after_attempt</code>, <code>stop_after_delay</code>, <code>wait_random</code>, and there’s even a <code>wait_exponential</code>.</p>
+<p>See also: R package <code>purrr</code>’s <code>insistently</code> function.</p>
+<section id="example-of-tenacity" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-tenacity">Example of Tenacity</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tenacity <span class="im">import</span> retry, stop_after_attempt</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="at">@retry</span>(stop<span class="op">=</span>stop_after_attempt(<span class="dv">3</span>))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_func():</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Stopping after 3 attempts"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">Exception</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(test_func())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Stopping after 3 attempts
+Stopping after 3 attempts
+Stopping after 3 attempts
+
+
+
+---------------------------------------------------------------------------
+
+Exception                                 Traceback (most recent call last)
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/tenacity/__init__.py:407, in Retrying.__call__(self, fn, *args, **kwargs)
+    406 try:
+--&gt; 407     result = fn(*args, **kwargs)
+    408 except BaseException:  # noqa: B902
+
+
+Input In [13], in test_func()
+      5 print("Stopping after 3 attempts")
+----&gt; 6 raise Exception
+
+
+Exception: 
+
+
+The above exception was the direct cause of the following exception:
+
+
+RetryError                                Traceback (most recent call last)
+
+Input In [13], in &lt;module&gt;
+      5     print("Stopping after 3 attempts")
+      6     raise Exception
+----&gt; 8 print(test_func())
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/tenacity/__init__.py:324, in BaseRetrying.wraps.&lt;locals&gt;.wrapped_f(*args, **kw)
+    322 @functools.wraps(f)
+    323 def wrapped_f(*args: t.Any, **kw: t.Any) -&gt; t.Any:
+--&gt; 324     return self(f, *args, **kw)
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/tenacity/__init__.py:404, in Retrying.__call__(self, fn, *args, **kwargs)
+    402 retry_state = RetryCallState(retry_object=self, fn=fn, args=args, kwargs=kwargs)
+    403 while True:
+--&gt; 404     do = self.iter(retry_state=retry_state)
+    405     if isinstance(do, DoAttempt):
+    406         try:
+
+
+File /opt/anaconda3/envs/noodling/lib/python3.8/site-packages/tenacity/__init__.py:361, in BaseRetrying.iter(self, retry_state)
+    359     if self.reraise:
+    360         raise retry_exc.reraise()
+--&gt; 361     raise retry_exc from fut.exception()
+    363 if self.wait:
+    364     sleep = self.wait(retry_state=retry_state)
+
+
+RetryError: RetryError[&lt;Future at 0x7f9f10f73eb0 state=finished raised Exception&gt;]</code></pre>
+</section>
+</section>
+<section id="streamlit" class="level2">
+<h2 class="anchored" data-anchor-id="streamlit">7. Streamlit</h2>
+<p>I really like <a href="https://www.streamlit.io/">streamlit</a>, which sells itself as the fastest way to build data apps that are displayed in a browser window. And my experience is that it’s true; you can do a lot with a very simple set of commands. But there’s also depth there too - a couple of the examples on their site show how streamlit can serve up explainable AI models. Very cool.</p>
+<p>If you build a streamlit app and want to host it on the web, Streamlit and Heroku offer free hosting.</p>
+<p>Because streamlit serves up content in a browser, it’s not (currently) possible to demonstrate it in a Jupyter Notebook. However, this gif gives you an idea of how easy it is to get going:</p>
+<p><img src="https://miro.medium.com/max/1400/1*6GG7uRmUw74CRKCXD-lr1w.gif" width="800"></p>
+<p>See also: <a href="https://plotly.com/dash/">Dash</a></p>
+</section>
+<section id="black" class="level2">
+<h2 class="anchored" data-anchor-id="black">8. Black</h2>
+<p><a href="https://black.readthedocs.io/en/stable/index.html">Black</a> is an uncompromising code formatter (“you can have it any colour you want, as long as it’s black”). Lots of people will find it overbearing, and think the way it splits code across lines is distracting. However, if you want to easily and automatically implement a code style – without compromise – then it’s great and you can even set it up as a github action to run on your code every time you commit. Less time formatting sounds good to me.</p>
+<p>Black is run from the command line or via IDE integration, so the example here is just a before and after of what happens to a function definition:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in:</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> very_important_function(template: <span class="bu">str</span>, <span class="op">*</span>variables, <span class="bu">file</span>: os.PathLike, engine: <span class="bu">str</span>, header: <span class="bu">bool</span> <span class="op">=</span> <span class="va">True</span>, debug: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>):</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Applies `variables` to the `template` and writes to `file`."""</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="bu">file</span>, <span class="st">'w'</span>) <span class="im">as</span> f:</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># out:</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> very_important_function(</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    template: <span class="bu">str</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>variables,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">file</span>: os.PathLike,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    engine: <span class="bu">str</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    header: <span class="bu">bool</span> <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    debug: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Applies `variables` to the `template` and writes to `file`."""</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="bu">file</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>        ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>See also: <a href="https://github.com/google/yapf">yapf</a>, yet another code formatter, from Google.</p>
+<section id="live-demo" class="level3">
+<h3 class="anchored" data-anchor-id="live-demo">Live demo</h3>
+</section>
+</section>
+<section id="pyinstrument-for-profiling-code" class="level2">
+<h2 class="anchored" data-anchor-id="pyinstrument-for-profiling-code">9. Pyinstrument for profiling code</h2>
+<p>Profiling is about finding where the bottlenecks are in your code; potentially in your data too.</p>
+<p><a href="https://github.com/joerick/pyinstrument">pyinstrument</a> is a simple-to-use tool that extends the built-in Python profiler with HTMLs output that can be rendered in a Jupyter notebook cell.</p>
+<p>Using this profiler is very simple – just wrap ‘start’ and ‘stop’ function calls around the code you’re interested in and show the results in text or HTML. The HTML report is interactive. To use the HTML report in a Jupyter notebook, you’ll need to use</p>
+<pre><code>from IPython.core.display import display, HTML</code></pre>
+<p>and then</p>
+<pre><code>display(HTML(profiler.output_html()))</code></pre>
+<p>In the example below, I’ll use the display as text option.</p>
+<p>See also: <a href="https://github.com/emeryberger/scalene">scalene</a>, which I almost featured instead because it profiles both code and memory use (important for data science). However, it isn’t supported on Windows (yet?) and it doesn’t seem to display a report inline in Jupyter notebooks.</p>
+<section id="example-of-pyinstrument" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-pyinstrument">Example of Pyinstrument</h3>
+</section>
+</section>
+<section id="pyinstrument-for-profiling-code-1" class="level2">
+<h2 class="anchored" data-anchor-id="pyinstrument-for-profiling-code-1">9. Pyinstrument for profiling code</h2>
+<p>Profiling is about finding where the bottlenecks are in your code; potentially in your data too.</p>
+<p><a href="https://github.com/joerick/pyinstrument">pyinstrument</a> is a simple-to-use tool that extends the built-in Python profiler with HTMLs output that can be rendered in a Jupyter notebook cell.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://github.com/joerick/pyinstrument/raw/main/docs/img/screenshot.jpg" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">pyinstrument screenshot</figcaption>
+</figure>
+</div>
+<p>Using this profiler is very simple – just wrap ‘start’ and ‘stop’ function calls around the code you’re interested in and show the results in text or HTML. The HTML report is interactive. To use the HTML report in a Jupyter notebook, you’ll need to use</p>
+<pre><code>from IPython.core.display import display, HTML</code></pre>
+<p>and then</p>
+<pre><code>display(HTML(profiler.output_html()))</code></pre>
+<p>In the example below, I’ll use the display as text option.</p>
+<p>See also: <a href="https://github.com/emeryberger/scalene">scalene</a>, which I almost featured instead because it profiles both code and memory use (important for data science). However, it isn’t supported on Windows (yet?) and it doesn’t seem to display a report inline in Jupyter notebooks.</p>
+<section id="example-of-pyinstrument-1" class="level3">
+<h3 class="anchored" data-anchor-id="example-of-pyinstrument-1">Example of Pyinstrument</h3>
+<p>Run this code in a notebook to check it out.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyinstrument <span class="im">import</span> Profiler</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>profiler <span class="op">=</span> Profiler()</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>profiler.start()</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fibonacci(n):</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">Exception</span>(<span class="st">"BE POSITIVE!!!"</span>)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> n <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> n <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">1</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fibonacci(n <span class="op">-</span> <span class="dv">1</span>) <span class="op">+</span> fibonacci(n <span class="op">-</span> <span class="dv">2</span>)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>fibonacci(<span class="dv">20</span>)</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>profiler.stop()</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(profiler.output_text(<span class="bu">unicode</span><span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="va">True</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="alive-progress" class="level1">
+<h1>10. Alive progress</h1>
+<p><a href="https://github.com/rsalmei/alive-progress">alive-progress</a> is a bit less straitlaced than tdqm but is unfortunately not yet available in notebooks. Here’s a gif that shows how it looks when run from a console launched on the command line.</p>
+<p><img src="https://raw.githubusercontent.com/rsalmei/alive-progress/master/img/alive-demo.gif" width="600"></p>
+<section id="see-also-tdqm" class="level3">
+<h3 class="anchored" data-anchor-id="see-also-tdqm">See also: tdqm</h3>
+<p><img src="https://img.tqdm.ml/tqdm.gif" width="700"></p>
+</section>
+<section id="live-demo-of-alive-progress" class="level3">
+<h3 class="anchored" data-anchor-id="live-demo-of-alive-progress">Live demo of alive progress</h3>
+</section>
+<section id="bonus-r-style-analysis-in-python" class="level2">
+<h2 class="anchored" data-anchor-id="bonus-r-style-analysis-in-python">Bonus: R-style analysis in Python!?</h2>
+<p>Some data scientists swear by two of R’s most loved declarative packages, one for data analysis (dplyr) and one for plotting (ggplot2), and miss them when they do a project in Python. Although certainly not as well developed as the original packages, there are Python-inspired equivalents of both, called <a href="https://github.com/machow/siuba">siuba</a> and <a href="https://plotnine.readthedocs.io/en/stable/">plotnine</a> respectively.</p>
+<p>It’s worth noting that there are <em>imperative</em> and <em>declarative</em> plotting libraries. In imperative libraries, you often specify all of the steps to get the desired outcome, while in declarative libraries you often specify the desired outcome without the steps. Imperative plotting gives more control and some people may find each step clearer to read, but it can also be fiddly and cumbersome, especially with simple plots. Declarative plotting trades away control and flexibility in favour of tried and tested processes that can quickly produce good-looking standardised charts, but the specialised syntax can be a barrier for newcomers.</p>
+<p>ggplot/plotnine are both declarative, while matplotlib is imperative.</p>
+<p>As for data analysis, Python’s pandas library is very similar to dplyr, it just has slightly different names for functions (eg <code>summarize</code> versus <code>aggregate</code> but both use <code>groupby</code>) and pandas uses <code>.</code> while dplyr tends to use <code>%&gt;%</code> to apply the output of one function to the input of another.</p>
+<section id="plotnine" class="level3">
+<h3 class="anchored" data-anchor-id="plotnine">Plotnine</h3>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine.data <span class="im">import</span> mtcars</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>(ggplot(mtcars, aes(<span class="st">'wt'</span>, <span class="st">'mpg'</span>, color<span class="op">=</span><span class="st">'factor(gear)'</span>))</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a> <span class="op">+</span> geom_point()</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a> <span class="op">+</span> stat_smooth(method<span class="op">=</span><span class="st">'lm'</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a> <span class="op">+</span> facet_wrap(<span class="st">'~gear'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="10_less_img_36.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Output from plotnine</figcaption>
+</figure>
+</div>
+</section>
+<section id="siuba" class="level3">
+<h3 class="anchored" data-anchor-id="siuba">Siuba</h3>
+<p>Siuba is more or less similar to dplyr in R. It even has a pipe operator - although in Python’s <strong>pandas</strong> data analysis package, <code>.</code> usually plays the same role as the pipe in dplyr.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> siuba <span class="im">import</span> group_by, summarize, mutate, _</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> siuba.data <span class="im">import</span> mtcars</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>mtcars.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small">
+<thead>
+<tr>
+<th>
+</th>
+<th>
+mpg
+</th>
+<th>
+cyl
+</th>
+<th>
+disp
+</th>
+<th>
+hp
+</th>
+<th>
+drat
+</th>
+<th>
+wt
+</th>
+<th>
+qsec
+</th>
+<th>
+vs
+</th>
+<th>
+am
+</th>
+<th>
+gear
+</th>
+<th>
+carb
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+0
+</th>
+<td>
+21.0
+</td>
+<td>
+6
+</td>
+<td>
+160.0
+</td>
+<td>
+110
+</td>
+<td>
+3.90
+</td>
+<td>
+2.620
+</td>
+<td>
+16.46
+</td>
+<td>
+0
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+4
+</td>
+</tr>
+<tr>
+<th>
+1
+</th>
+<td>
+21.0
+</td>
+<td>
+6
+</td>
+<td>
+160.0
+</td>
+<td>
+110
+</td>
+<td>
+3.90
+</td>
+<td>
+2.875
+</td>
+<td>
+17.02
+</td>
+<td>
+0
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+4
+</td>
+</tr>
+<tr>
+<th>
+2
+</th>
+<td>
+22.8
+</td>
+<td>
+4
+</td>
+<td>
+108.0
+</td>
+<td>
+93
+</td>
+<td>
+3.85
+</td>
+<td>
+2.320
+</td>
+<td>
+18.61
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+1
+</td>
+</tr>
+<tr>
+<th>
+3
+</th>
+<td>
+21.4
+</td>
+<td>
+6
+</td>
+<td>
+258.0
+</td>
+<td>
+110
+</td>
+<td>
+3.08
+</td>
+<td>
+3.215
+</td>
+<td>
+19.44
+</td>
+<td>
+1
+</td>
+<td>
+0
+</td>
+<td>
+3
+</td>
+<td>
+1
+</td>
+</tr>
+<tr>
+<th>
+4
+</th>
+<td>
+18.7
+</td>
+<td>
+8
+</td>
+<td>
+360.0
+</td>
+<td>
+175
+</td>
+<td>
+3.15
+</td>
+<td>
+3.440
+</td>
+<td>
+17.02
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+3
+</td>
+<td>
+2
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>(mtcars</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">&gt;&gt;</span> mutate(normalised <span class="op">=</span> (_.hp <span class="op">-</span> _.hp.mean())<span class="op">/</span>_.hp.std()) </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">&gt;&gt;</span> group_by(_.cyl)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">&gt;&gt;</span> summarize(norm_hp_mean <span class="op">=</span> _.normalised.mean())</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small">
+<thead>
+<tr>
+<th>
+</th>
+<th>
+cyl
+</th>
+<th>
+norm_hp_mean
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>
+0
+</th>
+<td>
+4
+</td>
+<td>
+-0.934196
+</td>
+</tr>
+<tr>
+<th>
+1
+</th>
+<td>
+6
+</td>
+<td>
+-0.355904
+</td>
+</tr>
+<tr>
+<th>
+2
+</th>
+<td>
+8
+</td>
+<td>
+0.911963
+</td>
+</tr>
+</tbody>
+
+</table>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

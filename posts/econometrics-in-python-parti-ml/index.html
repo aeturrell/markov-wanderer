@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Turrell">
+<meta name="dcterms.date" content="2018-02-10">
+
+<title>Markov Wanderer - Econometrics in Python part I - Double machine learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Markov Wanderer - Econometrics in Python part I - Double machine learning">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://aeturrell.github.io/markov-wanderer/posts/econometrics-in-python-parti-ml/DoubleMLCauchy.png">
+<meta name="twitter:creator" content="@arthurturrell">
+<meta name="twitter:image-height" content="1200">
+<meta name="twitter:image-width" content="1800">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Markov Wanderer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="http://aeturrell.github.io/home/" rel="" target=""><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/aeturrell" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/arthurturrell" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Econometrics in Python part I - Double machine learning</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">econometrics</div>
+                <div class="quarto-category">python</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Arthur Turrell </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 10, 2018</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#double-machine-learning-in-practice" id="toc-double-machine-learning-in-practice" class="nav-link active" data-scroll-target="#double-machine-learning-in-practice">Double machine learning in practice</a></li>
+  <li><a href="#simulated-example" id="toc-simulated-example" class="nav-link" data-scroll-target="#simulated-example">Simulated example</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><em>The idea is that this will be the first in a series of posts covering econometrics in Python.</em></p>
+<p>At a conference a couple of years ago, I saw Victor Chernozhukov present his paper on <a href="https://arxiv.org/abs/1608.00060">Double/Debiased Machine Learning for Treatment and Causal Parameters</a>. It really stuck with me because of the way it fruitfully combines econometrics and machine learning. Machine learning is obsessed with prediction, and is getting <a href="https://blog.floydhub.com/Turning-design-mockups-into-code-with-deep-learning/">very good at it</a>. Econometrics is obsessed with causality and identification, and pretty good at it - especially in ‘messy’ real-world situations. Combining the two promises to provide powerful new ways to understand causal relationships.</p>
+<p>So, in brief, what does ‘double’ machine learning do? It’s one way to bring the power of machine learning for prediction on non-linear problems into an econometric context in which the asymptotic properties of the estimates of the parameters of interest are known to behave well. The problem is that just applying machine learning to predict outcomes (<span class="math inline">\(Y\)</span>) from a treatment or variable (<span class="math inline">\(D\)</span>) in the presence of many controls (<span class="math inline">\(X\)</span>) will lead to biased estimates of the model parameter (<span class="math inline">\(\theta\)</span>). The double machine learning method of Chernozhukov <em>et al.</em> delivers point estimators that have a <span class="math inline">\(\sqrt{N}\)</span> rate of convergence for <span class="math inline">\(N\)</span> observations and are approximately unbiased and normally distributed.</p>
+<p>The clearest example, which I reproduce here from the paper, is of partially linear regression. They take it themselves from <a href="https://www.jstor.org/stable/1912705">Robinson (1988)</a>. The model is</p>
+<p><span class="math display">\[
+Y = D\cdot\theta + g(X) + U, \quad \quad \mathbb{E} \left[U | X, D \right] =0 \\
+D = m(X) + V, \quad \quad \mathbb{E} \left[V | X\right] =0
+\]</span></p>
+<p>with <span class="math inline">\(X = (X_1,X_2,\dots,X_p)\)</span> a vector of controls. Here <span class="math inline">\(\eta=(m,g)\)</span> can be non-linear.</p>
+<p>The naïve machine learning approach would be to estimate <span class="math inline">\(D\cdot\hat{\theta} + \hat{g}(X)\)</span> using one of the standard algorithms (random forest, support vector regression, etc). The authors of the paper show that doing this means that <span class="math inline">\(\hat{\theta}\)</span> effectively has a slower than root <span class="math inline">\(N\)</span> rate of convergence due to the bias in estimating <span class="math inline">\(\hat{g}\)</span>.</p>
+<p>They suggest overcoming this bias using orthogonalisation and splitting the sample. They obtain <span class="math inline">\(\hat{V} = D - \hat{m}(X)\)</span> using machine learning on an auxiliary sample; finding the mean of <span class="math inline">\(D\)</span> given <span class="math inline">\(X\)</span>. With the remaining observations, they define an estimator for <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\check{ \theta}\)</span>, which is a function of <span class="math inline">\(\hat{V}\)</span>, <span class="math inline">\(D\)</span>, <span class="math inline">\(X\)</span>, and an estimate of <span class="math inline">\(g\)</span> given by <span class="math inline">\(\hat{g}\)</span>. As they say (with a slight change in notation),</p>
+<blockquote class="blockquote">
+<p>By approximately orthogonalizing <span class="math inline">\(D\)</span> with respect to <span class="math inline">\(X\)</span> and approximately removing the direct effect of confounding by subtracting an estimate of <span class="math inline">\(\hat{g}\)</span>, <span class="math inline">\(\check{ \theta}\)</span> removes the effect of regularization bias … The formulation of <span class="math inline">\(\check{ \theta}\)</span> also provides direct links to both the classical econometric literature, as the estimator can clearly be interpreted as a linear instrumental variable (IV) estimator, …</p>
+</blockquote>
+<p>The double comes from estimating <span class="math inline">\(\hat{V}\)</span> in the auxiliary problem, as well as <span class="math inline">\(\hat{g}\)</span>, before calculating the estimator <span class="math inline">\(\check{\theta}\)</span>. In their paper, Chernozhukov <em>et al.</em> also discuss estimating average treatment effects, local average treatment effects, and average treatment effects for the treated using a more general formulation where <span class="math inline">\(g\)</span> is a function of both <span class="math inline">\(X\)</span> and <span class="math inline">\(D\)</span>. More on the technical details and other applications can be found in the paper; here we’ll look at an example estimation in the context of a model</p>
+<section id="double-machine-learning-in-practice" class="level3">
+<h3 class="anchored" data-anchor-id="double-machine-learning-in-practice">Double machine learning in practice</h3>
+<p>So how does it work in practice? With the sample split into two sets of size <span class="math inline">\(n=N/2\)</span> indexed by <span class="math inline">\(i\in I\)</span> and <span class="math inline">\(i \in I^C\)</span>, there are four steps,</p>
+<ol type="1">
+<li>Estimate <span class="math inline">\(\hat{V} = D - \hat{m}(X)\)</span> using <span class="math inline">\(I^C\)</span></li>
+<li>Estimate <span class="math inline">\(Y = \hat{g}(X) + \hat{u}\)</span> using <span class="math inline">\(I^C\)</span></li>
+<li>Estimate <span class="math display">\[\check{\theta}(I^C,I) = \left(\frac{1}{n}\displaystyle\sum_{i\in I}\hat{V}_i D_i\right)^{-1} \frac{1}{n} \displaystyle\sum_{i\in I} \hat{V}_i \left(Y_i-\hat{g}(X_i)\right)\]</span></li>
+<li>Construct the efficient, cross-fitting estimate: <span class="math display">\[\check{\theta}_{\text{cf}} = \frac{1}{2} \left[\check{\theta}\left(I^C,I\right)+\check{\theta}\left(I,I^C\right) \right]\]</span></li>
+</ol>
+</section>
+<section id="simulated-example" class="level3">
+<h3 class="anchored" data-anchor-id="simulated-example">Simulated example</h3>
+<p>This example was inspired by this <a href="https://www.r-bloggers.com/cross-fitting-double-machine-learning-estimator/">great post</a> by Gabriel Vasconcelos. To make it more exciting, I’ll use a slightly different functional form with <span class="math inline">\(g\)</span> as sine squared and <span class="math inline">\(m\)</span> as the wrapped Cauchy distribution:</p>
+<p><span class="math display">\[
+g(x)= \sin^2(x) \\
+m(x;\nu,\gamma)= \frac{1}{2\pi} \frac{\sinh(\gamma)}{\cosh(\gamma)-\cos(x-\nu)}
+\]</span></p>
+<p>Let’s keep it simple and set <span class="math inline">\(\nu=0\)</span> and <span class="math inline">\(\gamma=1\)</span>. The wrapped Cauchy looks like this:</p>
+<p><img src="DoubleMLCauchy.png" class="img-fluid" alt="The wrapped Cauchy distribution"><em>The wrapped Cauchy distribution</em></p>
+<p>Our model is</p>
+<p><span class="math display">\[
+y_i = d_i\theta + g(x_i'\cdot b) + u_i, \quad \quad  \\
+d_i = m(x_i'\cdot b) + v_i \quad \quad
+\]</span></p>
+<p><span class="math inline">\(x_i\)</span> has length <span class="math inline">\(K=10\)</span> and will be generated from a multivariate normal distribution, the true value of the causal parameter will be <span class="math inline">\(\theta=0.5\)</span>, and <span class="math inline">\(b_k=1/k\)</span>. The errors will be</p>
+<p><span class="math display">\[
+u_i, v_i \thicksim \mathcal{N}(0,1)
+\]</span></p>
+<p>and I’m going to use the <a href="http://scikit-learn.org/stable/index.html">scikit learn</a> implementation of the <a href="https://en.wikipedia.org/wiki/Random_forest">random forest regressor</a> to do the machine learning.</p>
+<p>Note that I’m using a scalar <span class="math inline">\(D\)</span> in the example below but, in the original paper, it’s a binary treatment - thanks to <a href="https://twitter.com/KyleCSN">Kyle Carlson</a> for pointing out that this could cause some confusion!</p>
+<p>The code, using Python 3, is</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_spd_matrix</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm <span class="co"># for OLS</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor <span class="co"># Our ML algorithm</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up the environment</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>randomseednumber <span class="op">=</span> <span class="dv">11022018</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(randomseednumber)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">500</span> <span class="co"># No. obs</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>k<span class="op">=</span><span class="dv">10</span> <span class="co"># = No. variables in x_i</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>theta<span class="op">=</span><span class="fl">0.5</span> <span class="co"># Structural parameter</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>b<span class="op">=</span> [<span class="dv">1</span><span class="op">/</span>k <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">11</span>)] <span class="co"># x weights</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>sigma <span class="op">=</span> make_spd_matrix(k,randomseednumber) <span class="co">#</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># NUmber of simulations</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>MC_no <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> g(x):</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.power(np.sin(x),<span class="dv">2</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> m(x,nu<span class="op">=</span><span class="fl">0.</span>,gamma<span class="op">=</span><span class="fl">1.</span>):</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">0.5</span><span class="op">/</span>math.pi<span class="op">*</span>(np.sinh(gamma))<span class="op">/</span>(np.cosh(gamma)<span class="op">-</span>np.cos(x<span class="op">-</span>nu))</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Array of estimated thetas to store results</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>theta_est <span class="op">=</span> np.zeros(shape<span class="op">=</span>[MC_no,<span class="dv">3</span>])</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(MC_no):</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Generate data: no. obs x no. variables in x_i</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> np.random.multivariate_normal(np.ones(k),sigma,size<span class="op">=</span>[N,])</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> g(np.dot(X,b))</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    M <span class="op">=</span> m(np.dot(X,b))</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    D <span class="op">=</span> M<span class="op">+</span>np.random.standard_normal(size<span class="op">=</span>[<span class="dv">500</span>,])</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    Y <span class="op">=</span> np.dot(theta,D)<span class="op">+</span>G<span class="op">+</span>np.random.standard_normal(size<span class="op">=</span>[<span class="dv">500</span>,])</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">#</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Now run the different methods</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">#</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># OLS --------------------------------------------------</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    OLS <span class="op">=</span> sm.OLS(Y,D)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> OLS.fit()</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    theta_est[i][<span class="dv">0</span>] <span class="op">=</span> results.params[<span class="dv">0</span>]</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Naive double machine Learning ------------------------</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    naiveDMLg <span class="op">=</span>RandomForestRegressor(max_depth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute ghat</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    naiveDMLg.fit(X,Y)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    Ghat <span class="op">=</span> naiveDMLg.predict(X)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    naiveDMLm <span class="op">=</span>RandomForestRegressor(max_depth<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    naiveDMLm.fit(X,D)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    Mhat <span class="op">=</span> naiveDMLm.predict(X)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># vhat as residual</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    Vhat <span class="op">=</span> D<span class="op">-</span>Mhat</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    theta_est[i][<span class="dv">1</span>] <span class="op">=</span> np.mean(np.dot(Vhat,Y<span class="op">-</span>Ghat))<span class="op">/</span>np.mean(np.dot(Vhat,D))</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">#  Cross-fitting DML -----------------------------------</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Split the sample</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    I <span class="op">=</span> np.random.choice(N,np.<span class="bu">int</span>(N<span class="op">/</span><span class="dv">2</span>),replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    I_C <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> np.arange(N) <span class="cf">if</span> x <span class="kw">not</span> <span class="kw">in</span> I]</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ghat for both</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>    Ghat_1 <span class="op">=</span> RandomForestRegressor(max_depth<span class="op">=</span><span class="dv">2</span>).fit(X[I],Y[I]).predict(X[I_C])</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    Ghat_2 <span class="op">=</span> RandomForestRegressor(max_depth<span class="op">=</span><span class="dv">2</span>).fit(X[I_C],Y[I_C]).predict(X[I])</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Mhat and vhat for both</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    Mhat_1 <span class="op">=</span> RandomForestRegressor(max_depth<span class="op">=</span><span class="dv">2</span>).fit(X[I],D[I]).predict(X[I_C])</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    Mhat_2 <span class="op">=</span> RandomForestRegressor(max_depth<span class="op">=</span><span class="dv">2</span>).fit(X[I_C],D[I_C]).predict(X[I])</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    Vhat_1 <span class="op">=</span> D[I_C]<span class="op">-</span>Mhat_1</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    Vhat_2 <span class="op">=</span> D[I] <span class="op">-</span> Mhat_2</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    theta_1 <span class="op">=</span> np.mean(np.dot(Vhat_1,(Y[I_C]<span class="op">-</span>Ghat_1)))<span class="op">/</span>np.mean(np.dot(Vhat_1,D[I_C]))</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    theta_2 <span class="op">=</span> np.mean(np.dot(Vhat_2,(Y[I]<span class="op">-</span>Ghat_2)))<span class="op">/</span>np.mean(np.dot(Vhat_2,D[I]))</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    theta_est[i][<span class="dv">2</span>] <span class="op">=</span> <span class="fl">0.5</span><span class="op">*</span>(theta_1<span class="op">+</span>theta_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Below is a plot of the kernel density estimates of <span class="math inline">\(\theta\)</span> using <a href="https://seaborn.pydata.org/">seaborn</a>. The peak of the distributions for OLS and double ML without cross-fitting are off the true value, but the cross-fitted double ML procedure gets much closer.</p>
+<p><img src="DoubleMLEsts.png" class="img-fluid" alt="The estimates of theta"><em>The estimates of <span class="math inline">\(\theta\)</span></em></p>
+<p>So there it is: double machine learning is a useful technique at the intersection of machine learning and econometrics which can produce approximately unbiased and normally distributed point estimates in semi-parametric settings.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

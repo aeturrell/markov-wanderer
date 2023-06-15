@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Turrell">
+<meta name="dcterms.date" content="2023-01-13">
+
+<title>Markov Wanderer - Why you shouldn’t code on your work laptop</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Markov Wanderer - Why you shouldn’t code on your work laptop">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://aeturrell.github.io/markov-wanderer/posts/why-you-shouldnt-code/elisa-ventur-bmJAXAz6ads-unsplash.jpg">
+<meta name="twitter:creator" content="@arthurturrell">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Markov Wanderer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="http://aeturrell.github.io/home/" rel="" target=""><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/aeturrell" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/arthurturrell" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Why you shouldn’t code on your work laptop</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">open-source</div>
+                <div class="quarto-category">cloud</div>
+                <div class="quarto-category">data science</div>
+                <div class="quarto-category">work chat</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Arthur Turrell </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 13, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#enterprise-it-can-sacrifice-productivity-for-safety" id="toc-enterprise-it-can-sacrifice-productivity-for-safety" class="nav-link active" data-scroll-target="#enterprise-it-can-sacrifice-productivity-for-safety">Enterprise IT can sacrifice productivity for safety</a></li>
+  <li><a href="#from-problems-to-solutions" id="toc-from-problems-to-solutions" class="nav-link" data-scroll-target="#from-problems-to-solutions">From problems to solutions</a></li>
+  <li><a href="#where-can-i-code" id="toc-where-can-i-code" class="nav-link" data-scroll-target="#where-can-i-code">Where <em>can</em> I code?</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>“Nobody ever got fired for buying Microsoft” goes an old saying. Actually, it was probably first said in the 1980s in reference to IBM <span class="citation" data-cites="1983school">(<a href="#ref-1983school" role="doc-biblioref"><em>School Microcomputing Bulletin</em> 1983</a>)</span>, but the meaning remains the same: as the Chief Technology Officer, or similar, you’re not going to get in trouble for buying the boring old thing that everyone else is buying. (But you <em>might</em> get in trouble if you bought something that many of your staff <em>weren’t</em> comfortable with.) The attraction to what is considered safe, known, and widely-used is especially strong for large public institutions because they tend to be risk averse, subject to intense scrutiny, and responsible for statutatory processes that simply <em>cannot</em> go wrong.</p>
+<section id="enterprise-it-can-sacrifice-productivity-for-safety" class="level2">
+<h2 class="anchored" data-anchor-id="enterprise-it-can-sacrifice-productivity-for-safety">Enterprise IT can sacrifice productivity for safety</h2>
+<p>There’s a trade-off though; when it comes to software and hardware, what is widely used and known may not be at the cutting-edge and, if it’s made endlessly safe, it can actively stifle innovation. To create, at least, a sense of safety, the “nobody ever got fired for buying …” type of software tends to be locked down. In the case of Microsoft’s popular operating system, Windows, which is endemic in large organisations, you may not even be able to change the screen saver: large, otherwise proud organisations humbly display whatever screensaver Microsoft has deemed appropriate rather than anything to do with the firm. Of course, screensavers don’t matter much: it’s when you want to automate the start-up of the computer, or edit a particular type of file, or create a reproducible analytical pipeline, that the locked-down nature of enterprise IT starts to preserve safety at the cost of producitivity. It isn’t just control either; the quality of laptop needed by different employees will vary enormously, but enterprise IT will often see everyone landed with the same kit.</p>
+<p>Why is this such a problem in large organisations? You can’t imagine a tech start-up stopping its staff from installing whatever is needed to get the job done. The assumption that CTOs have made is that giving <em>all</em> users the power to change their screensaver or execute scripts will mean someone will eventually harm the organisation (for example, through unintentionally deleting someone else’s data or releasing something publicly that should have been private). Or perhaps it’s just that enterprise IT doesn’t give the fine-grained control needed to empower staff to be productive—perhaps it’s that the systems that CTOs of large organisations can buy are either locked down, or they are not; there’s no customisability. In any case, the fact that large organisations harbour a very large and heterogeneous set of IT users is behind the need for policies and processes that stop people installing the software they need or changing settings to get things done. One size fits all, and the system is crafted around minimising risk rather than maximising productivity. What makes the trade-off much harder is that safety breaches and computing accidents are very countable and discoverable, but lost productivity from innovations that didn’t happen are not.</p>
+<p>The locked down nature of enterprise IT presents a real challenge for anyone trying to make their organisation more efficient using data science (or any other innovation for that matter). Want to deploy a dashboard? Hard. Want to deploy a machine learning model? Very hard. Want to ensure everyone has the same code environment for a training course? Tricky, especially if you’ve got people who have different ‘home’ IT because they’re drawn from different units from across the enterprise, each with their own variant of the IT. Even downloading the software to build a machine learning model is nigh on impossible in a locked-down Windows ecosystem: installing Python is often blocked or requires a call to a service desk; installing packages is often blocked and, even when a package delivery solution is in place, it may not work as intended; some packages are frequently blocked from running because they require on-the-fly compilation (<a href="https://www.pymc.io">PyMC</a>, for example); and then many frameworks do not work on Windows itself. (Windows Subsystem for Linux is not a silver bullet for these problems.) Even the basic automation of scripts and so on is more tricky on Windows, assuming that you are able to run scripts. As the final cherry on the cake, Microsoft Outlook blocks <code>.py</code> files as they might be harmful (though please put your code under version control rather than emailing it around).</p>
+<p>You might think I’m picking on Microsoft here. I am. Because, even though they make some fantastic software (Visual Studio Code is genuinely incredible), they are so dominant in the marketplace. A typical day at a large firm will often involve logging on to a Microsoft Windows computer, opening up Microsoft Outlook to read emails, having calls on Microsoft Teams, surfing the internet via Microsoft Edge, writing a note on Microsoft Word, creating a slide deck on Microsoft Powerpoint, taking notes on Microsoft OneNote, entering a discussion on Microsoft’s Yammer network, and sharing files on the dreaded Microsoft Sharepoint. I simply do not believe that Microsoft produces the best tools for email, calendar, operating system, word processing, data analysis, file sharing, internet browsing, presentations, community discussion, <em>and</em> video conferencing. (Do you think there might be a competition problem here?) I’ll allow that OneNote is pretty good though.</p>
+<p>You might also think that enterprise IT solutions mean that everything that works on one computer will work on another. You’d be wrong! Updates are applied at different times for different people, hardware is rolled out gradually rather than all at once, and people can still change their own systems through choosing to install extras from a provided ‘Software Centre’. So, for all that enterprise IT is controlled, it still suffers from the “it works on my computer” problem.</p>
+</section>
+<section id="from-problems-to-solutions" class="level2">
+<h2 class="anchored" data-anchor-id="from-problems-to-solutions">From problems to solutions</h2>
+<p>There are a lot of issues to sort here, and something as drastic as competition policy may be needed to unleash productivity from better software for most firms. But I do think there is a potential solution for data scientists and people working on automation, and one that the CTO and CDO can happily support.</p>
+<p>The problem we’re really trying to solve for data scientists who want to improve their organisation is: how can we run the latest, greatest packages on the same infrastructure without dealing with locked-down IT? And while also retaining as much of the safety that large organisations hanker for? Switching everyone to Linux might help, sure; it could save some money as the operating system is free (though human support isn’t), and there’s evidence that some firms using (free versions of) Linux are more productive <span class="citation" data-cites="nagle2019open">(<a href="#ref-nagle2019open" role="doc-biblioref">Nagle 2019</a>)</span>. But this would require organisation-level change and mass upskilling, and is unlikely to happen due to proprietary software lock-in. Fortunately, there’s a simpler way.</p>
+<p>My proposal is that we should simply stop coding on work laptops. Just stop. It is simply too difficult to get enterprise IT Windows laptops that are locked down to do everything we really need to improve an organisation while still satisfying the security constraints.</p>
+</section>
+<section id="where-can-i-code" class="level2">
+<h2 class="anchored" data-anchor-id="where-can-i-code">Where <em>can</em> I code?</h2>
+<p>So, if I’m saying do not code on your work Windows laptop, where <em>should</em> you code? The answer, in short, is the cloud. At its best, this provides an isolated, reproducible, environment. It completely solves the “it doesn’t work on my computer” problem. It solves the operating system problem too, because cloud computing can be on any operating system—including ones that are specified in code (“infrastructure as code”). It better integrates with (and even encourages) version control and Continuous Integration and Continuous Deployment (CI/CD). Best of all, these isolated environments aren’t subject to the vagaries of enterprise IT because they are separate, and accessed (typically) only through a browser window.</p>
+<p>I want to be clear: this does not mean that doing your coding via cloud computing is unsafe. It’s almost certainly safer, and in many ways: whatever you are doing on the cloud should not go anywhere near your email application. If your IT department has cloud expertise, they can do things that will greatly reduce the risk of any kind of cloud-based data leak. Best practice for sensitive data is considered to be holding them in a secure cloud environment anyway. And, with asset-level control, you can grant access only to the users who need it—quite a contrast to having a writeable file on a network drive (yes, this still happens in 2023). Of course, someone actively trying to do harm still can, but this is true on any system.</p>
+<p>There are a number of services now out there that provide these reproducible coding environments at low or even no cost, depending on the number of hours used per month. The big players are Google Cloud Compute, Amazon Web Services, and Microsoft Azure. These require a bit more expertise to set up, and typically have to be used with buy-in and help from architecture experts. But there are increasingly off the shelf reproducible code environments that you can use for all but very sensitive and or confidential data. These include:</p>
+<ul>
+<li><a href="https://github.com/features/codespaces">Github Codespaces</a>, which has a free tier, uses Visual Studio Code by default, and can be accessed in browser or via Visual Studio Code desktop. It works at the level of a GitHub repo so has particularly good integration with version control.</li>
+<li><a href="https://www.gitpod.io/">Gitpod</a>, which has a free tier, uses Visual Studio Code by default, and can be accessed in browser or via Visual Studio Code desktop.</li>
+<li><a href="https://cloud.google.com/workstations">Google Cloud Workstations</a>, which takes more set up and uses Code-OSS (the open source version of Visual Studio Code).</li>
+</ul>
+<p>Github Codespaces is probably the easiest service to access if your IT department has no real expertise in cloud computing. It only requires that each person has a GitHub account, that your IT department has unblocked Github’s website, and that you have some billing in place if you go over the free tier hours. Of course, Github is actually owned by Microsoft, and your firm is probably already buying Microsoft (“Nobody ever got fired for buying Microsoft”!) so all you need to do is to convince IT to pay for an extra service from a firm they already have a relationship with. (If you’re lucky, your IT department will already know a lot about cloud computing and have arranged empowered access to it for you—but a large number of firms are unlikely to be able to provide this.)</p>
+<p>Now, you will still need to think carefully about where any data you are using will live and how you get it into your codespace (or similar). But having a (secure) connection to some sort of cloud storage bucket is a good default if there isn’t an API around that you can consume directly.</p>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In short, if you’re looking to get a reproducible, working code environment that is consistent across users and you have an IT department that doesn’t have much expertise in coding or cloud computing, my recommendation is that you:</p>
+<ul>
+<li>do not try and get your IT dept to put analytical programming languages on work laptops;</li>
+<li>instead, get them to unblock GitHub and have any users create an account on it (with billing if necessary);</li>
+<li>use GitHub for version control; and</li>
+<li>use <a href="https://github.com/features/codespaces">Github Codespaces</a> for your coding environment (with optional docker containers for reproducible environments)</li>
+</ul>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-nagle2019open" class="csl-entry" role="listitem">
+Nagle, Frank. 2019. <span>“Open Source Software and Firm Productivity.”</span> <em>Management Science</em> 65 (3): 1191–1215.
+</div>
+<div id="ref-1983school" class="csl-entry" role="listitem">
+<em>School Microcomputing Bulletin</em>. 1983. v. 2-5. Learning Publications. <a href="https://books.google.co.uk/books?id=hVdRAAAAYAAJ">https://books.google.co.uk/books?id=hVdRAAAAYAAJ</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

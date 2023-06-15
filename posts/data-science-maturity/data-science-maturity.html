@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Turrell">
+<meta name="dcterms.date" content="2023-03-01">
+
+<title>Markov Wanderer - Data science maturity and the cloud</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../logo.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="twitter:title" content="Markov Wanderer - Data science maturity and the cloud">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://aeturrell.github.io/markov-wanderer/posts/data-science-maturity/dallas-reedy-H83_BXx3ChY-unsplash.jpg">
+<meta name="twitter:creator" content="@arthurturrell">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Markov Wanderer</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="http://aeturrell.github.io/home/" rel="" target=""><i class="bi bi-laptop" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/aeturrell" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/arthurturrell" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Data science maturity and the cloud</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">rstats</div>
+                <div class="quarto-category">data science</div>
+                <div class="quarto-category">cloud</div>
+                <div class="quarto-category">work chat</div>
+                <div class="quarto-category">public sector</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Arthur Turrell </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 1, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-to-check-an-organisations-data-science-maturity" id="toc-how-to-check-an-organisations-data-science-maturity" class="nav-link active" data-scroll-target="#how-to-check-an-organisations-data-science-maturity">How to check an organisation’s data science maturity</a></li>
+  <li><a href="#how-to-create-the-right-environment-for-data-science-to-flourish" id="toc-how-to-create-the-right-environment-for-data-science-to-flourish" class="nav-link" data-scroll-target="#how-to-create-the-right-environment-for-data-science-to-flourish">How to create the right environment for data science to flourish</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Data science has enormous potential to do good in the public sector. The efficiencies that are possible from automation and reproducible analytical pipelines alone are huge—if you like this is improvement at <em>existing</em> tasks. Throw machine learning and advanced analytics into the mix and data science can also complete entirely new tasks, <em>expanding the horizon of what’s possible</em>. It’s an exciting time to be a data scientist.</p>
+<p>And yet I regularly speak to data scientists who are frustrated in their roles because the tech in their organisation simply does not give them the ability to do their job in the best way possible; or, even worse, they do not have the <em>agency</em> to do their job well. Data science, and data scientists, need the right conditions to flourish.</p>
+<p>So, if you’re looking at your own organisation’s data science offering, what are the key things you should be able to do? And how can we ensure that data scientists have them?</p>
+<section id="how-to-check-an-organisations-data-science-maturity" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-check-an-organisations-data-science-maturity">How to check an organisation’s data science maturity</h2>
+<p>This is a highly personal, non-empirical, experience-based list of what the essentials are for data scientists to be productive. To some extent, subsequent elements build upon previous ones.</p>
+<ol type="1">
+<li><strong>First of all, data scientists need an <em>integrated development environment</em> (IDE) to write their code in.</strong> No, this isn’t just a Jupyter Notebook, though vendors seem to think that’s all data scientists ever use (it’s great to have notebooks but they’re not enough on their own). It looks more like <em>Visual Studio Code</em> for most languages, or perhaps <em>RStudio</em> for R (though you can use <em>Visual Studio Code</em> for R too, as covered in <a href="../../posts/setting-up-r-in-vscode/index.html">this blog post</a>).</li>
+<li><strong>Packages for the integrated development environment</strong>. Before you’re even writing code, you need the right extensions (aka packages) for your IDE to allow you to work effectively. For example, the <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.python">Python extension</a> is critical for using Python in Visual Studio Code. But there’s a bunch of others for markdown, automatically writing docstrings, colourising hex colour codes, integrating with github, sorting your package imports, writing latex, and on and on… These are essential to a (productive) data science workflow.</li>
+<li><strong>A way to manage installations of programming languages that can execute code.</strong> This means installations of Python and R, but not just having a single version of those on a machine : data scientists need a way to manage <em>multiple</em> environments, usually on a per project basis. This might mean one project is on Python 3.8.8, while another is using Python 3.10. Data scientists need control of this, and tools such as <a href="https://python-poetry.org/">poetry</a> or <a href="https://www.anaconda.com/products/distribution">Anaconda</a> give it to them. With this, data scientists can execute their code.</li>
+<li><strong>A way to install packages and libraries for base installations of programming languages.</strong> Python and R alone aren’t much good. Their power comes from extending them with, in the case of Python, 100s of thousands of extra code libraries. These libraries come from repositories such as PyPI and CRAN. In the case of Python, they are installed via an instruction on the command line that triggers dependency resolution and then a download over the internet. Both poetry and Anaconda can act as intermediaries to the Python repositories, and can be used as command line tools to install packages in specific coding environments.</li>
+<li><strong>Access to the command line</strong>. A command line is a way to write instructions directly to a computer. Data scientists need it for all kinds of things, from install packages (see above) to renaming and moving files, to managing code environments (see 3). On some enterprise IT solutions, access to the command line is blocked. Windows doesn’t have a conventional command line (well, it does, but it uses a different set of commands, and has fewer useful tools).</li>
+<li><strong>A way to put code under version control.</strong> It’s best practice for data scientists to put code under version control and it’s absolutely essential for collaboration and audit. In practice, this means an installation of git, the most popular version control tool. You can use git either through an integrated development environment (see 1) or through the command line (see above). Data scientists will also need a central repository service to share code with each other, usually Gitlab or Github</li>
+<li><strong>The ability to create efficient stores of data, and to access data programmatically</strong>. It might seem like an absolute basic, but many organisations struggle with where to keep their data. There are infamous examples of public sector operations going wrong because of errors in spreadsheets and the bottom line is that neither data nor computations should be in spreadsheets. Data scientists need to be able to flexibly create stores of data on servers; putting data on a shared network drive does not suffice. For example, most data scientists will need to be able to create databases that their colleagues can also access. They also need to be able to access stored data programmatically (ie through analytical tools such as R and Python). Without efficient read and write options like these, data scientists are going to be slowed right down.</li>
+<li><strong>A unix-like computing environment, for example Linux or MacOS.</strong> Microsoft’s Windows operating system has its strong points, (and, despite its cost, it’s a popular solution for public sector IT) but it’s not at all geared toward coding or automation. So much so that some modern data science libraries don’t work at all on Windows. There are a host of reasons behind this. They don’t matter, the point is the same: for data scientists, working on unix-like environments is just going to be a lot easier.</li>
+<li><strong>Tooling around reproducibility.</strong> A key tenet of good data science, not to mention good analysis, is that it should be reproducible. Clearly this is important for reproducible analytical pipelines too. We’ve already met a few of the tools that can reproduce code environments (eg poetry and Anaconda), but data scientists also need tools to run pipelines (eg Make and Dagster), and even to reproduce entire operating systems (eg Docker). So these tools need to be available and usable, and a good test of an organisation is whether it can support the deployment of <a href="https://www.docker.com/">Docker</a> images.</li>
+<li><strong>Continuous integration / continuous deployment, and the ability to schedule code execution.</strong> If we’re serious about getting data science solutions deployed in operation areas, it’s absolutely critical that data scientists can test code on the fly as part of pull requests, one element of continuous integration. And that, before deployment, a series of checks take place before something goes live. Far from having the ability to do these, many organisations would struggle to have a script that is executed at a regular frequency. Without the ability to schedule events and scripts, what data science can do is going to be severely limited to having a human in the loop—missing out on a lot of the potential benefits.</li>
+<li><strong>The cloud.</strong> The reality of data science in 2023 is that much more can be achieved on the cloud than using a single laptop or on an on-prem machine (say a server sat in the basement). For example, if you’re working with data at enormous scales, you probably want to put it in something like Google’s BigQuery. I’m not even sure how you would deploy a machine learning model if not on the cloud—and asking how many models have been deployed to production is another good one for assessing an organisation’s data science maturity. There are emerging cloud services such as <a href="https://cloud.google.com/workstations">Google Cloud Workstation</a> and <a href="https://github.com/features/codespaces">Github Codespaces</a> that make getting started on cloud easier than ever, too. You may hear arguments that cloud isn’t safe. While I’m not sure I buy those arguments given the plausible alternatives, the policy of the UK government is cloud-first anyway—and <a href="https://www.gov.uk/guidance/government-cloud-first-policy">it has been since 2013</a>. Increasingly, the best practice principle is to <em>not</em> code <a href="../../posts/why-you-shouldnt-code/why-you-shouldnt-code.html">directly on your work laptop</a>. So if you encounter an organisation that is entirely on-prem for “security” reasons, I’d really question whether they have a comparative advantage in providing secure computing services and what trade-off with efficiency and functionality they’re implicitly making.</li>
+<li><strong>The ability to compile code and install code-adjacent tools</strong>. While Python, R, and SQL do not need compiling in the same way that C++ does, they do sometimes write their own code that needs compiling. The packages that are front-ends to the Bayesian library Stan are great examples of this—even though you write a Python or R code, somewhere in the background code in another language needs to be compiled. Enterprise Windows laptops will block that compilation. Another example would be the popular Python geospatial data science package <a href="https://geopandas.org"><strong>geopandas</strong></a> which has a bunch of dependencies that aren’t in Python at all, but still need to be installed.</li>
+</ol>
+<p>Perhaps surprisingly, many organisations, even those with data scientists, struggle to provide 1—4.</p>
+</section>
+<section id="how-to-create-the-right-environment-for-data-science-to-flourish" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-create-the-right-environment-for-data-science-to-flourish">How to create the right environment for data science to flourish</h2>
+<p>You’re probably interested in how an organisation can effectively achieve the environment that data scientists need to flourish. Looking at the list above, it might seem like a lot. But it’s actually not hard. Basically, an account with AWS (Amazon Web Services), GCP (Google Cloud Platform), or Azure (Microsoft’s cloud platform) will open up all of this. A lot of organisations get that far (though not all).</p>
+<p>Where organisations then fall down is putting a barrier that stops data scientists provisioning their own specific services from these cloud providers: instead of giving data scientists a budget and telling them to do what they need to, individual cloud services are often managed by an intermediate layer: usually the IT department and sometimes an external vendor that aims to provide a complete solution.</p>
+<p>On the face of it, this model makes sense: IT already provision and manage work laptops (plus all the programmes on them), why shouldn’t they also provision specific cloud services for data scientists? There are a few good reasons I personally don’t believe they should:</p>
+<ul>
+<li>the time of people in IT departments is usually extremely precious; we can save their time as much as possible by allowing data scientists to self-provision the services they need.</li>
+<li>workers in IT departments are technical experts but are unlikely to be huge users of data science tools themselves—leading to a gap between data scientists’ needs and what is provisioned. The example of external vendors thinking data scientists just use Jupyter Notebooks for everything is classic. I have had (extremely helpful) colleagues in IT who were surprised that data scientists needed to use the command line.</li>
+<li>having data scientists own the budget and directly provision their own services makes for a tighter feedback loop between costs and services. If that link is broken, people can unwittingly run up huge bills.</li>
+<li>having data scientists be able to self-provision means they feel empowered and are faster at getting what they need. I heard of one public sector organisation where it takes two weeks and numerous forms and emails to set up a (basic) SQL database: the result is that no-one sets up a SQL database, even if that would be the best solution. In general, I think it’s a good principle to give experts a brief, a budget, an accountability framework, and then let them get on with the job—and this applies to data scientists here.</li>
+<li>work laptops are typically used by all staff, and so they need to be fairly fool proof, which is why IT specialists are needed to manage the fleet of work laptops and to triage any issues. Data scientists are themselves technical experts, so do not actually need this level of service.</li>
+<li>by introducing a threshold or barrier to the process (eg you have to use a service desk request to try something), you discourage innovation of the kind that may not work, but just might, if someone could just try something quickly.</li>
+</ul>
+<p>I’m not talking about data scientists choosing whether it’s GCP or AWS or whoever providing the cloud services here; the IT department or similar doing that makes a lot of sense. But within that outer wrapper, I think it makes much more sense for data scientists to choose the specific services they need without going through a middle layer.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="dallas-reedy-H83_BXx3ChY-unsplash.jpg" class="img-fluid figure-img" alt="A heart-shaped cloud floating by."></p>
+<figcaption class="figure-caption">Avoid the wrong sort of cloud provision</figcaption>
+</figure>
+</div>
+<p>If you stop to think about it, the model we usually use is the one where enabling functions determine a service provider then let people choose the specific products or services according to their local budget. The Chief Operating Office might choose which firm serves up food in the canteen, but the COO isn’t going to actually come to the canteen and force you to eat the salad; you get to choose within your budget. Similarly, back when organisations actually needed stationary, there was usually a high-level agreement with a supplier but local business areas would then decide what their area needed within their budget. Why should it be different for specific cloud services for experts like data scientists?</p>
+<p>Some might say there are risks with this approach. For example, IT specialists are trained in security practices, or can build in security practices, that prevent data leaks or other things that keep Chief Information Officers up at night. I think data scientists could cover this just as well, though I think that we might need more training in it. I would also say that this apparently risky counter-factual is better than where we are right now: we have data leaks and errors because people are using the wrong tools and tech (cf the problems with Excel spreadsheets and people being forced to email data rather than programmatically access it because they cannot create databases or APIs). So I don’t really buy that there’s even a trade-off here. But even if there was we undervalue innovation because risks are tangible and apparent but the improvements we <em>could</em> achieve if we were to make a slightly different trade-off are not. Innovation may still be worth doing.</p>
+<p>As noted by <a href="https://www.ft.com/content/5a4cf5b1-56ef-4445-bda3-20b81d1ef752">Tim Harford</a>, it’s quite telling that such a lot of innovation happened in the public sector during the pandemic when the usual rules (and, I must say, barriers) were temporarily suspended. I believe there’s a win-win-win here where data scientists are empowered to innovate and improve public services, budget holders can get accountability from those who are actually spending the money on cloud services, and ever-busy IT departments don’t have to manage cloud services on top of everything else.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
