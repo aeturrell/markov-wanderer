@@ -2,8 +2,7 @@
 date: "2023-06-15"
 layout: post
 title: "The mystery of stuff: why all the self-storage?"
-draft: true
-categories: [code, data, geospatial]
+categories: [code, data, geospatial, analysis, llm]
 ---
 
 There's a mystery at the fringes of our towns and cities: beyond the concrete circulars and just off the dual carriageways, a seemingly growing amount of our stuff is collecting dust in purpose-built warehouses. The puzzle is why so many self-storage units have sprung up across the UK and what people are storing in them that they need so very rarely.
