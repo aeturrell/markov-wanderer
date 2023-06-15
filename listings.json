@@ -2,6 +2,7 @@
   {
     "listing": "/archive.html",
     "items": [
+      "/posts/self-storage-mystery/self-storage-mystery.html",
       "/posts/data-science-maturity/data-science-maturity.html",
       "/posts/managing-public-sector-knowledge/managing-public-sector-knowledge.html",
       "/posts/why-you-shouldnt-code/why-you-shouldnt-code.html",
@@ -30,6 +31,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/self-storage-mystery/self-storage-mystery.html",
       "/posts/data-science-maturity/data-science-maturity.html",
       "/posts/managing-public-sector-knowledge/managing-public-sector-knowledge.html",
       "/posts/why-you-shouldnt-code/why-you-shouldnt-code.html",

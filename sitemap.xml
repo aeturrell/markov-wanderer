@@ -2,106 +2,110 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/left-out-of-he/index.html</loc>
-    <lastmod>2023-06-15T16:56:31.312Z</lastmod>
+    <lastmod>2023-06-15T16:58:56.683Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/data-science-maturity/data-science-maturity.html</loc>
-    <lastmod>2023-06-15T16:56:31.984Z</lastmod>
+    <lastmod>2023-06-15T16:58:57.362Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/specification-curve-analysis/index.html</loc>
-    <lastmod>2023-06-15T16:56:32.660Z</lastmod>
+    <lastmod>2023-06-15T16:58:58.024Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/managing-public-sector-knowledge/managing-public-sector-knowledge.html</loc>
-    <lastmod>2023-06-15T16:56:33.475Z</lastmod>
+    <lastmod>2023-06-15T16:58:58.839Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/better-narrative-on-narratives/index.html</loc>
-    <lastmod>2023-06-15T16:56:33.804Z</lastmod>
+    <lastmod>2023-06-15T16:58:59.160Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/10-lesser-known-python-packages/index.html</loc>
-    <lastmod>2023-06-15T16:56:34.755Z</lastmod>
+    <lastmod>2023-06-15T16:59:00.023Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/visual-studio-code-in-the-cloud/index.html</loc>
-    <lastmod>2023-06-15T16:56:35.535Z</lastmod>
+    <lastmod>2023-06-15T16:59:00.787Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/running-many-regressions-alongside-pandas/index.html</loc>
-    <lastmod>2023-06-15T16:56:35.931Z</lastmod>
+    <lastmod>2023-06-15T16:59:01.168Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/econometrics-in-python-partii-fixed-effects/index.html</loc>
-    <lastmod>2023-06-15T16:56:36.249Z</lastmod>
+    <lastmod>2023-06-15T16:59:01.484Z</lastmod>
+  </url>
+  <url>
+    <loc>https://aeturrell.github.io/markov-wanderer/posts/self-storage-mystery/self-storage-mystery.html</loc>
+    <lastmod>2023-06-15T16:59:02.328Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/econometrics-in-python-parti-ml/index.html</loc>
-    <lastmod>2023-06-15T16:56:37.545Z</lastmod>
+    <lastmod>2023-06-15T16:59:02.720Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/get-organised/index.html</loc>
-    <lastmod>2023-06-15T16:56:39.167Z</lastmod>
+    <lastmod>2023-06-15T16:59:04.277Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/why-you-shouldnt-code/why-you-shouldnt-code.html</loc>
-    <lastmod>2023-06-15T16:56:39.755Z</lastmod>
+    <lastmod>2023-06-15T16:59:04.851Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/publication-quality-plots-in-python/index.html</loc>
-    <lastmod>2023-06-15T16:56:40.442Z</lastmod>
+    <lastmod>2023-06-15T16:59:05.536Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/wikipedia-into-stem/index.html</loc>
-    <lastmod>2023-06-15T16:56:40.864Z</lastmod>
+    <lastmod>2023-06-15T16:59:05.946Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/three-ways-to-blog-with-code/index.html</loc>
-    <lastmod>2023-06-15T16:56:41.975Z</lastmod>
+    <lastmod>2023-06-15T16:59:07.070Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/the-prize-with-apis/the-prize-with-apis.html</loc>
-    <lastmod>2023-06-15T16:56:42.444Z</lastmod>
+    <lastmod>2023-06-15T16:59:07.544Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/welcome/index.html</loc>
-    <lastmod>2023-06-15T16:56:42.718Z</lastmod>
+    <lastmod>2023-06-15T16:59:07.818Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/game-theory-rescue/index.html</loc>
-    <lastmod>2023-06-15T16:56:43.079Z</lastmod>
+    <lastmod>2023-06-15T16:59:08.165Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/ons-api/index.html</loc>
-    <lastmod>2023-06-15T16:56:43.365Z</lastmod>
+    <lastmod>2023-06-15T16:59:08.463Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/setting-up-r-in-vscode/index.html</loc>
-    <lastmod>2023-06-15T16:56:43.851Z</lastmod>
+    <lastmod>2023-06-15T16:59:08.938Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/estimation-heterogeneous-treatment-random-forests/index.html</loc>
-    <lastmod>2023-06-15T16:56:44.259Z</lastmod>
+    <lastmod>2023-06-15T16:59:09.345Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/research-blogs/index.html</loc>
-    <lastmod>2023-06-15T16:56:44.880Z</lastmod>
+    <lastmod>2023-06-15T16:59:09.919Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/posts/til-how-to-break-xml/index.html</loc>
-    <lastmod>2023-06-15T16:56:45.375Z</lastmod>
+    <lastmod>2023-06-15T16:59:10.401Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/archive.html</loc>
-    <lastmod>2023-06-15T16:56:46.106Z</lastmod>
+    <lastmod>2023-06-15T16:59:11.146Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/index.html</loc>
-    <lastmod>2023-06-15T16:56:47.541Z</lastmod>
+    <lastmod>2023-06-15T16:59:12.663Z</lastmod>
   </url>
   <url>
     <loc>https://aeturrell.github.io/markov-wanderer/about.html</loc>
-    <lastmod>2023-06-15T16:56:47.800Z</lastmod>
+    <lastmod>2023-06-15T16:59:12.917Z</lastmod>
   </url>
 </urlset>

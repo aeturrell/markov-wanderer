@@ -10,7 +10,526 @@
 <atom:link href="https://aeturrell.github.io/markov-wanderer/index.xml" rel="self" type="application/rss+xml"/>
 <description>A blog on economics, coding, and data science. Views are my own.</description>
 <generator>quarto-1.3.361</generator>
-<lastBuildDate>Wed, 01 Mar 2023 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 14 Jun 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>The mystery of stuff: why all the self-storage?</title>
+  <dc:creator>Arthur Turrell</dc:creator>
+  <link>https://aeturrell.github.io/markov-wanderer/posts/self-storage-mystery/self-storage-mystery.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>There’s a mystery at the fringes of our towns and cities: beyond the concrete circulars and just off the dual carriageways, a seemingly growing amount of our stuff is collecting dust in purpose-built warehouses. The puzzle is why so many self-storage units have sprung up across the UK and what people are storing in them that they need so very rarely.</p>
+<p>I should be clear: I don’t know if the number has increased or not. It just <em>seems</em> like their numbers have increased, and others have noticed this and remarked upon it to me too (I have some pretty thrilling conversations with data scientists and economists). It was ONS Fellow <a href="https://www.strath.ac.uk/staff/mcintyrestuartprofessor/">Professor Stuart McIntyre</a> who first asked me the question and I’ve been thinking about it since.</p>
+<p>You may, by now, be wondering why you should care. This isn’t just about an interesting phenomenon with self-storage units, though that does seem worth exploring. What it’s really about is what we can find out about the <em>local sites</em> of firms. This could be a single, independent chippy, the site of a chain restaurant, or, indeed, an outpost of a self-storage firm. In short, lots of entities that people do care about.</p>
+<p>So I thought it would be fun to at least look at what data are available to estimate the number of these self-storage units and whether it’s changing over time.</p>
+<section id="hypotheses" class="level2">
+<h2 class="anchored" data-anchor-id="hypotheses">Hypotheses</h2>
+<p>Although this post is more about the how, it’s fun to think a little bit about the ‘why?’ too.</p>
+<p>In films, books, and television, storage units are shady places where murderers keep their grisly trophies or international criminal gangs stash ill-gotten gains. In practice, they’re likely to be a place to dump furniture that there’s no space for, and this suggests a few explanations.</p>
+<p>Maybe the falling cost of budget furniture is partly behind the rise in storage units or perhaps it’s our ageing population that, sadly, often means clearing out the houses of elderly relatives after they are gone (but which their descendants can’t quite bear to part with). Of course, house prices are high so using storage may be cheaper than having a bigger home, but it’s a lot less convenient if you need something. You can imagine people converting their garages to extra bedrooms and stashing their junkier items in storage.</p>
+<p>Having said that there could be economic reasons, these units are expensive! The price for 35 sq ft (3.5 square metres) in a self-storage place in Croydon is around £37 <em>a week</em>. You have to really care about that stuff to pay that much to keep it. At a time when most people are cutting back, it seems strange to spend so much on just keeping some stuff that is rarely used.</p>
+<p>Another potential explanation is that the market for second-hand goods has become deeper, so there’s more storage needed not in homes to park it while it’s waiting to be transacted.</p>
+<p>There are lots of possible economic hypotheses behind the rise of self-storage, but for now what we want data to tell us whether or not this anecdotal effect is real or not.</p>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<blockquote class="blockquote">
+<p>‘“Data! Data! Data!”, he cried impatiently. “I can’t make bricks without clay.”’</p>
+<p>—Sherlock Holmes</p>
+</blockquote>
+<p>Before you get too excited, there isn’t a killer data source here that I’m aware of. And it’s complicated by needing a <em>time series</em> rather than simply a cross-section, which means we need historical data. There are a range of different possible options we could pursue to <em>try</em> to get a handle on this:</p>
+<ol type="1">
+<li>Open Street Map data</li>
+<li>UK firm-site level data, eg from the Interdepartmental Business Database</li>
+<li>Using the Google Maps API to count sites</li>
+<li>Scraping the websites of the main self-storage firms</li>
+</ol>
+<p>Let’s look at each of these strategies in turn.</p>
+<section id="open-street-map-data" class="level3">
+<h3 class="anchored" data-anchor-id="open-street-map-data">Open Street Map data</h3>
+<p>So we’re going to use the crowd-sourced Open Street Map data to try to answer this question. It has a number of caveats: it’s only updated (items added or deleted) when a member of the public decides to update it. So it may not give a totally accurate picture of what’s going on, but it’s a fantastic resource nonetheless because it aspires to be comprehensive and consistent in its tags. While it may not give a perfect count of what’s out there, you hope that it might track it.</p>
+<p>We will use the Open Street Map <a href="https://wiki.openstreetmap.org/wiki/Overpass_API">Overpass Turbo API</a> to do a query on all self-storage units in the UK. The query can be run <a href="https://overpass-turbo.eu/">here</a>.</p>
+<pre class="text"><code>[out:json];
+area["ISO3166-1"="GB"]-&gt;.uk;
+(
+  node["shop"="storage_rental"](area.uk);
+  way["shop"="storage_rental"](area.uk);
+  relation["shop"="storage_rental"](area.uk);
+);
+out center;</code></pre>
+<p>In the interactive API, this produces a nice map of all ways and nodes (two types of object defined by the underlying data structures of Open Street Map).</p>
+<p><img src="https://aeturrell.github.io/markov-wanderer/posts/self-storage-mystery/overpass_results.png" class="img-fluid" alt="Map of self-storage units according to Open Street Map."></p>
+<p>If you save the data to a GeoJSON file and open it with <a href="https://geopandas.org/"><strong>geopandas</strong></a>, you can then count up the number of instances using</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">df <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> gpd.read_file(Path(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"export.geojson"</span>))</span>
+<span id="cb2-2">val_counts <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> df[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>].value_counts()</span>
+<span id="cb2-3">val_counts[val_counts<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>]</span></code></pre></div>
+<table class="table">
+<caption>Numbers of self-storage sites by firm, according to Open Street Map data</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Big Yellow Self Storage</td>
+<td style="text-align: right;">40</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Safestore</td>
+<td style="text-align: right;">38</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Access Self Storage</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lok’nStore</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">UK Storage Company</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ready Steady Store</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Storage King</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Shurgard Self Storage</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Safestore Self Storage</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+<p>Unfortunately, this just doesn’t check out with other information. We can check how many units Big Yellow actually have on their website, and it’s far more than 40 (the total is 107). Partly, this is about matching records. We can check this with</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">val_counts.index.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>.contains(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Yellow"</span>).<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()</span></code></pre></div>
+<pre class="text"><code>11</code></pre>
+<p>This means that 11 rows had a mention of “Yellow” in, whereas we expect only a single row (with all counts). If we sum up these rows as a rough proxy of what the number <em>should</em> be:</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">val_counts.loc[val_counts.index.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>.contains(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Yellow"</span>)].<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()</span></code></pre></div>
+<pre class="text"><code>52</code></pre>
+<p>We get 52, still far short of what we know the total is (assuming Big Yellow Self Storage’s website is up to date!)<sup>1</sup></p>
+<p>Even if the numbers were correct, we don’t just need the number for today, we need it <em>over time</em>. This is an API query that, in principle, can help us understand the change since 2019 (when used in combination with the other data we already got).</p>
+<pre class="text"><code>[out:json];
+area["ISO3166-1"="GB"]-&gt;.uk;
+(
+  node["shop"="storage_rental"](area.uk)(if: timestamp() &lt;= "2018-12-01T00:00:00Z");
+  way["shop"="storage_rental"](area.uk)(if: timestamp() &lt;= "2018-12-01T00:00:00Z");
+  relation["shop"="storage_rental"](area.uk)(if: timestamp() &lt;= "2018-12-01T00:00:00Z");
+);
+out center;</code></pre>
+<p>Again, you can export the results to a GeoJSON file and open it with <strong>geopandas</strong> and <em>then</em> compare it:</p>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">df_time <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> gpd.read_file(Path(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"export_pre_2019.geojson"</span>))</span>
+<span id="cb8-2">df_time[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>].value_counts().<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">sum</span>()</span></code></pre></div>
+<p>In this query, we find only 33 sites <em>in total</em>, and only one Big Yellow Self Storage site.</p>
+<p>This doesn’t check out either: using the ever-awesome internet archive, we can dial <a href="https://web.archive.org/web/20170225054741/https://www.bigyellow.co.uk/">the clock back to 25th Feb 2017</a> and lo and behold the website says:</p>
+<blockquote class="blockquote">
+<p>a network of 89 storage facilities across London and the UK in high profile, easy–to–access location</p>
+</blockquote>
+<p>Open Street Map is an amazing resource but, for this purpose, it just doesn’t have the information we’re looking for.<sup>2</sup></p>
+</section>
+<section id="uk-site-firm-level-data" class="level3">
+<h3 class="anchored" data-anchor-id="uk-site-firm-level-data">UK site-firm level data</h3>
+<p>The Inter-Departmental Business Register is an excellent within-government resource that does have some site-level information (but those who work on it note that there’s lots of pitfalls in using these data).<sup>3</sup></p>
+<p>We could put in a request to the Office for National Statistics (ONS) to use the IDBR to produce the numbers of local units by firm but… they’d have to reject it! Even though you could walk down the street and see these units, and which firm they belong to, for yourself, it’s currently illegal for ONS to make firm-level data public even if it’s already in the public domain. The exact bit of legislation is outlined here:</p>
+<blockquote class="blockquote">
+<p>Unfortunately, we are unable to provide the names of organisations operating within a particular sector of the economy. Under s.39 of the Statistics and Registration Service Act 2007, personal information held by us (including that which identifies a body corporate), must not be disclosed. Furthermore, under s.9 of the Statistics of Trade Act 1947, the disclosure of information relating to an individual undertaking, obtained for statistical purposes, is prohibited. As the release of this information is prohibited by law, s.44 of the Freedom of Information Act 2000 applies.</p>
+</blockquote>
+<p><em>From a <a href="https://www.ons.gov.uk/aboutus/transparencyandgovernance/freedomofinformationfoi/companynames">note about firm names</a> on the ONS’ website</em></p>
+<p>However, we could ask the ONS to aggregate the number of local units by the relevant SIC code and year and publish that. But we would need to be confident that these firms are i) represented by one SIC code and ii) all have accurate SIC codes. Looking at a couple of firms on Companies House, I can see that one (Big Yellow) has SIC code “64306 - Activities of real estate investment trusts” while another, Safestore, has “68209 - Other letting and operating of own or leased real estate”, and another has “68320 - Management of real estate on a fee or contract basis” which makes me think there are problems on both fronts. None of them even have the same 4-digit SIC codes!</p>
+<p>If we were feeling bold, we might decide that existing data on <a href="https://www.ons.gov.uk/businessindustryandtrade/business/activitysizeandlocation/datasets/ukbusinessactivitysizeandlocation">Business Activity, Size, and Location</a> for one or more of these SIC codes could help us by acting as a proxy, but this dragnet approach would surely pull in lots of other kinds of business too. Furthermore, the data are available in separate Microsoft Excel files by year with empty cells and inconsistent formatting, so we’d have to spend some time writing code to extract the data in a consistent pattern. All not very satisfying.</p>
+<p>Overall, it seems like official data aren’t going to be massively helpful here.</p>
+</section>
+<section id="google-maps" class="level3">
+<h3 class="anchored" data-anchor-id="google-maps">Google Maps</h3>
+<p>Google Maps holds some promise. A quick search <a href="https://www.google.com/maps/search/self-storage/@51.4908126,-0.1310567,13.53z?entry=ttu">using the browser-based map</a> shows me that there is a category called “self-storage facility”. If we could use the API version to get results for all of the UK, we might be onto a winner.</p>
+<p>However, time is important in this question and (after checking with a Googler) there is no time dimension for Maps, it exists only in the present. Which is a shame because people would undoubtedly pay for snapshots in time and we could do a lot of interesting social analysis with it.</p>
+<p>When you’re not looking for a time series dimension though, Google Maps could be a great choice.</p>
+</section>
+<section id="scraping-the-websites-of-the-self-storage-firms" class="level3">
+<h3 class="anchored" data-anchor-id="scraping-the-websites-of-the-self-storage-firms">Scraping the websites of the self-storage firms</h3>
+<p>In this approach, we would scrape the websites of the self-storage firms to get information on their physical sites. This option has legs; so much so that we used it to validate our attempt to get these data from OSM. It works.<sup>4</sup> The problem is that it requires us to scrape <em>all</em> of the websites of the self-storage firms and to also scrape their <em>historical</em> websites too (via the internet archive). That’s possible, but quite hard work, as my guess is that each firm-time combination will need a bespoke scraping solution.</p>
+<p>There is one big limitation beyond needing bespoke scrapers: the internet archive doesn’t get <em>all</em> of a website, and so might be missing the key pages / information, especially if we rely on tricks like grabbing the address only.</p>
+<p>That aside, how might you go about getting this data using a scraper? Each location probably has a full address somewhere, so we could just scrape the entire website and use some kind of NLP to grab locations and hope that what gets picked up corresponds to the sites that are offered. There’d be some errors, like recording their primary office, but if you kept the page that the addresses were scraped from you could do something like eliminate any pages with just a single address.</p>
+<p>To put rocket boosters on this approach, you could use a large language model (LLM). A new feature just introduced by OpenAI, called <a href="https://platform.openai.com/docs/guides/gpt/function-calling">function calling</a>, makes this possible: essentially, it allows you to generate <em>structured</em> output from an LLM—think a JSON file—by defining a schema of data fields you’d like and then feeding it the text to find those fields. There’s a great prototype gist <a href="https://gist.github.com/kylemcdonald/dbac21de2d7855633689f5526225154c">here</a> that shows how to send an LLM a Washington Post article about a shooting and get it to extract salient information according to a schema. As it’s short, I’m including the code below. Note that not only is the schema defined, but there is a short description of each field too.</p>
+<div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> openai</span>
+<span id="cb9-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> json</span>
+<span id="cb9-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> requests</span>
+<span id="cb9-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> bs4 <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> BeautifulSoup</span>
+<span id="cb9-5">url <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'https://www.lapdonline.org/newsroom/officer-involved-shooting-in-hollywood-area-nrf059-18ma/'</span></span>
+<span id="cb9-6">html <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> requests.get(url).content</span>
+<span id="cb9-7">soup <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> BeautifulSoup(html).find(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'div'</span>, class_<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'detail-cms-content'</span>)</span>
+<span id="cb9-8">text <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> soup.text.strip()</span>
+<span id="cb9-9">functions <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb9-10">    {</span>
+<span id="cb9-11">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"extract_data"</span>,</span>
+<span id="cb9-12">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Add the summary of a newsroom article to the database."</span>,</span>
+<span id="cb9-13">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"parameters"</span>: {</span>
+<span id="cb9-14">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"object"</span>,</span>
+<span id="cb9-15">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"properties"</span>: {</span>
+<span id="cb9-16">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>: {</span>
+<span id="cb9-17">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"string"</span>,</span>
+<span id="cb9-18">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"format"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span></span>
+<span id="cb9-19">                    },</span>
+<span id="cb9-20">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"violent"</span>: {</span>
+<span id="cb9-21">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"boolean"</span>,</span>
+<span id="cb9-22">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Does this describe a violent incident?"</span></span>
+<span id="cb9-23">                    },</span>
+<span id="cb9-24">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fatal"</span>: {</span>
+<span id="cb9-25">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"boolean"</span>,</span>
+<span id="cb9-26">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Does this describe a fatal incident?"</span></span>
+<span id="cb9-27">                    },</span>
+<span id="cb9-28">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"in_custody"</span>: {</span>
+<span id="cb9-29">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"boolean"</span>,</span>
+<span id="cb9-30">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Did this happen in custody?"</span></span>
+<span id="cb9-31">                    },</span>
+<span id="cb9-32">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"unintentional_discharge"</span>: {</span>
+<span id="cb9-33">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"boolean"</span>,</span>
+<span id="cb9-34">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Was this an unintentional discharge?"</span></span>
+<span id="cb9-35">                    },</span>
+<span id="cb9-36">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"injured"</span>: {</span>
+<span id="cb9-37">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"array"</span>,</span>
+<span id="cb9-38">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"items"</span>: {</span>
+<span id="cb9-39">                            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"string"</span></span>
+<span id="cb9-40">                        },</span>
+<span id="cb9-41">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What are the names of the people who were injured, if any?"</span></span>
+<span id="cb9-42">                    },</span>
+<span id="cb9-43">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"deceased"</span>: {</span>
+<span id="cb9-44">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"array"</span>,</span>
+<span id="cb9-45">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"items"</span>: {</span>
+<span id="cb9-46">                            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"string"</span></span>
+<span id="cb9-47">                        },</span>
+<span id="cb9-48">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What are the names of the people who are deceased, if any?"</span></span>
+<span id="cb9-49">                    },</span>
+<span id="cb9-50">                    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"serials"</span>: {</span>
+<span id="cb9-51">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"array"</span>,</span>
+<span id="cb9-52">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"items"</span>: {</span>
+<span id="cb9-53">                                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"type"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"number"</span></span>
+<span id="cb9-54">                        },</span>
+<span id="cb9-55">                        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"description"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"What are the serial numbers of the officers involved?"</span></span>
+<span id="cb9-56">                    }</span>
+<span id="cb9-57">                },</span>
+<span id="cb9-58">            <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"required"</span>: [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"violent"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fatal"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"in_custody"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"unintentional_discharge"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"injured"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"deceased"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"serials"</span>],</span>
+<span id="cb9-59">        },</span>
+<span id="cb9-60">    }</span>
+<span id="cb9-61">]</span>
+<span id="cb9-62"></span>
+<span id="cb9-63">messages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb9-64">    {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"system"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"You are a helpful assistant that extracts summaries of LAPD newsroom articles as JSON for a database."</span>},</span>
+<span id="cb9-65">    {<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"role"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"user"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"content"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Extract a summary from the following article: '</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> text}</span>
+<span id="cb9-66">]</span>
+<span id="cb9-67"></span>
+<span id="cb9-68">response <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> openai.ChatCompletion.create(</span>
+<span id="cb9-69">    model<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'gpt-3.5-turbo-0613'</span>, functions<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>functions, messages<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>messages)</span>
+<span id="cb9-70"></span>
+<span id="cb9-71"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(response.choices[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'message'</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'function_call'</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'arguments'</span>])</span></code></pre></div>
+<p>And the output? Well, it’s quite magical:</p>
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">{</span>
+<span id="cb10-2">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>: <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"October 29, 2018"</span>,</span>
+<span id="cb10-3">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"violent"</span>: true,</span>
+<span id="cb10-4">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fatal"</span>: true,</span>
+<span id="cb10-5">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"in_custody"</span>: false,</span>
+<span id="cb10-6">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"unintentional_discharge"</span>: false,</span>
+<span id="cb10-7">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"injured"</span>: [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Officer Edward Agdeppa"</span>],</span>
+<span id="cb10-8">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"deceased"</span>: [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Albert Ramon Dorsey"</span>],</span>
+<span id="cb10-9">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"serials"</span>: [<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">41000</span>]</span>
+<span id="cb10-10">}</span></code></pre></div>
+<p>This sort of approach could really work! There would be some more legwork involved in grabbing the URLs (past and present) of the biggest self-storage firms but that doesn’t seem insurmountable because the internet archive is well structured.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>We’ve looked at four possible ways to answer how the number of self-storage facilities in the UK is changing over time. What’s amazing is that this information, which anyone could find out by driving round the country a bit, is so hard to get at. While self-storage facilities happened to be the topic of interest, the same applies to lots of other data that could be used to answer 100s of questions of relevance to the UK, so having ways to do this seems important.</p>
+<p>In this example, only one route seems feasible: scraping firm websites with the help of the excellent internet archive and either a lot of manual graft or a highly experimental using a large language model!</p>
+<p>Maybe I missed a way to get hold of this data? I’ll update the post if you can tell me other strategies. As for the LLM-approach we’ve found, I’m tempted to try it, and maybe you are too? Let me know!</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><em>Safestore</em> has 130 sites on its website, while OSM finds only 38, so this isn’t just a problem with <em>Big Yellow Self-Storage</em>.↩︎</p></li>
+<li id="fn2"><p>A similar exercise for <a href="https://web.archive.org/web/20110102193907/http://www.safestore.co.uk/default.aspx"><em>SafeStore</em></a> shows 90 locations in 2011, and <a href="https://web.archive.org/web/20160206185739/https://www.safestore.co.uk/">over 100 by 2016</a> but only one from OSM in 2017.↩︎</p></li>
+<li id="fn3"><p>ESCOE and ONS have done some great work trying to turn the IDBR into a longitudinal business database; check out the working paper <a href="https://escoe-website.s3.amazonaws.com/wp-content/uploads/2020/10/15063641/ESCoE-DP-2020-14.pdf">here</a>.↩︎</p></li>
+<li id="fn4"><p>Some data firms, such as Glass.AI, have specialised in firm website data so they may have some better ideas as to how to do this.↩︎</p></li>
+</ol>
+</section></div> ]]></description>
+  <category>code</category>
+  <category>data</category>
+  <category>geospatial</category>
+  <category>analysis</category>
+  <category>llm</category>
+  <guid>https://aeturrell.github.io/markov-wanderer/posts/self-storage-mystery/self-storage-mystery.html</guid>
+  <pubDate>Wed, 14 Jun 2023 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Data science maturity and the cloud</title>
   <dc:creator>Arthur Turrell</dc:creator>
@@ -7107,412 +7626,6 @@ Warnings:
   <category>python</category>
   <guid>https://aeturrell.github.io/markov-wanderer/posts/econometrics-in-python-partii-fixed-effects/index.html</guid>
   <pubDate>Tue, 20 Feb 2018 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Econometrics in Python part I - Double machine learning</title>
-  <dc:creator>Arthur Turrell</dc:creator>
-  <link>https://aeturrell.github.io/markov-wanderer/posts/econometrics-in-python-parti-ml/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><em>The idea is that this will be the first in a series of posts covering econometrics in Python.</em></p>
-<p>At a conference a couple of years ago, I saw Victor Chernozhukov present his paper on <a href="https://arxiv.org/abs/1608.00060">Double/Debiased Machine Learning for Treatment and Causal Parameters</a>. It really stuck with me because of the way it fruitfully combines econometrics and machine learning. Machine learning is obsessed with prediction, and is getting <a href="https://blog.floydhub.com/Turning-design-mockups-into-code-with-deep-learning/">very good at it</a>. Econometrics is obsessed with causality and identification, and pretty good at it - especially in ‘messy’ real-world situations. Combining the two promises to provide powerful new ways to understand causal relationships.</p>
-<p>So, in brief, what does ‘double’ machine learning do? It’s one way to bring the power of machine learning for prediction on non-linear problems into an econometric context in which the asymptotic properties of the estimates of the parameters of interest are known to behave well. The problem is that just applying machine learning to predict outcomes (<img src="https://latex.codecogs.com/png.latex?Y">) from a treatment or variable (<img src="https://latex.codecogs.com/png.latex?D">) in the presence of many controls (<img src="https://latex.codecogs.com/png.latex?X">) will lead to biased estimates of the model parameter (<img src="https://latex.codecogs.com/png.latex?%5Ctheta">). The double machine learning method of Chernozhukov <em>et al.</em> delivers point estimators that have a <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7BN%7D"> rate of convergence for <img src="https://latex.codecogs.com/png.latex?N"> observations and are approximately unbiased and normally distributed.</p>
-<p>The clearest example, which I reproduce here from the paper, is of partially linear regression. They take it themselves from <a href="https://www.jstor.org/stable/1912705">Robinson (1988)</a>. The model is</p>
-<p><img src="https://latex.codecogs.com/png.latex?%0AY%20=%20D%5Ccdot%5Ctheta%20+%20g(X)%20+%20U,%20%5Cquad%20%5Cquad%20%5Cmathbb%7BE%7D%20%5Cleft%5BU%20%7C%20X,%20D%20%5Cright%5D%20=0%20%5C%5C%0AD%20=%20m(X)%20+%20V,%20%5Cquad%20%5Cquad%20%5Cmathbb%7BE%7D%20%5Cleft%5BV%20%7C%20X%5Cright%5D%20=0%0A"></p>
-<p>with <img src="https://latex.codecogs.com/png.latex?X%20=%20(X_1,X_2,%5Cdots,X_p)"> a vector of controls. Here <img src="https://latex.codecogs.com/png.latex?%5Ceta=(m,g)"> can be non-linear.</p>
-<p>The naïve machine learning approach would be to estimate <img src="https://latex.codecogs.com/png.latex?D%5Ccdot%5Chat%7B%5Ctheta%7D%20+%20%5Chat%7Bg%7D(X)"> using one of the standard algorithms (random forest, support vector regression, etc). The authors of the paper show that doing this means that <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Ctheta%7D"> effectively has a slower than root <img src="https://latex.codecogs.com/png.latex?N"> rate of convergence due to the bias in estimating <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bg%7D">.</p>
-<p>They suggest overcoming this bias using orthogonalisation and splitting the sample. They obtain <img src="https://latex.codecogs.com/png.latex?%5Chat%7BV%7D%20=%20D%20-%20%5Chat%7Bm%7D(X)"> using machine learning on an auxiliary sample; finding the mean of <img src="https://latex.codecogs.com/png.latex?D"> given <img src="https://latex.codecogs.com/png.latex?X">. With the remaining observations, they define an estimator for <img src="https://latex.codecogs.com/png.latex?%5Ctheta">, <img src="https://latex.codecogs.com/png.latex?%5Ccheck%7B%20%5Ctheta%7D">, which is a function of <img src="https://latex.codecogs.com/png.latex?%5Chat%7BV%7D">, <img src="https://latex.codecogs.com/png.latex?D">, <img src="https://latex.codecogs.com/png.latex?X">, and an estimate of <img src="https://latex.codecogs.com/png.latex?g"> given by <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bg%7D">. As they say (with a slight change in notation),</p>
-<blockquote class="blockquote">
-<p>By approximately orthogonalizing <img src="https://latex.codecogs.com/png.latex?D"> with respect to <img src="https://latex.codecogs.com/png.latex?X"> and approximately removing the direct effect of confounding by subtracting an estimate of <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bg%7D">, <img src="https://latex.codecogs.com/png.latex?%5Ccheck%7B%20%5Ctheta%7D"> removes the effect of regularization bias … The formulation of <img src="https://latex.codecogs.com/png.latex?%5Ccheck%7B%20%5Ctheta%7D"> also provides direct links to both the classical econometric literature, as the estimator can clearly be interpreted as a linear instrumental variable (IV) estimator, …</p>
-</blockquote>
-<p>The double comes from estimating <img src="https://latex.codecogs.com/png.latex?%5Chat%7BV%7D"> in the auxiliary problem, as well as <img src="https://latex.codecogs.com/png.latex?%5Chat%7Bg%7D">, before calculating the estimator <img src="https://latex.codecogs.com/png.latex?%5Ccheck%7B%5Ctheta%7D">. In their paper, Chernozhukov <em>et al.</em> also discuss estimating average treatment effects, local average treatment effects, and average treatment effects for the treated using a more general formulation where <img src="https://latex.codecogs.com/png.latex?g"> is a function of both <img src="https://latex.codecogs.com/png.latex?X"> and <img src="https://latex.codecogs.com/png.latex?D">. More on the technical details and other applications can be found in the paper; here we’ll look at an example estimation in the context of a model</p>
-<section id="double-machine-learning-in-practice" class="level3">
-<h3 class="anchored" data-anchor-id="double-machine-learning-in-practice">Double machine learning in practice</h3>
-<p>So how does it work in practice? With the sample split into two sets of size <img src="https://latex.codecogs.com/png.latex?n=N/2"> indexed by <img src="https://latex.codecogs.com/png.latex?i%5Cin%20I"> and <img src="https://latex.codecogs.com/png.latex?i%20%5Cin%20I%5EC">, there are four steps,</p>
-<ol type="1">
-<li>Estimate <img src="https://latex.codecogs.com/png.latex?%5Chat%7BV%7D%20=%20D%20-%20%5Chat%7Bm%7D(X)"> using <img src="https://latex.codecogs.com/png.latex?I%5EC"></li>
-<li>Estimate <img src="https://latex.codecogs.com/png.latex?Y%20=%20%5Chat%7Bg%7D(X)%20+%20%5Chat%7Bu%7D"> using <img src="https://latex.codecogs.com/png.latex?I%5EC"></li>
-<li>Estimate <img src="https://latex.codecogs.com/png.latex?%5Ccheck%7B%5Ctheta%7D(I%5EC,I)%20=%20%5Cleft(%5Cfrac%7B1%7D%7Bn%7D%5Cdisplaystyle%5Csum_%7Bi%5Cin%20I%7D%5Chat%7BV%7D_i%20D_i%5Cright)%5E%7B-1%7D%20%5Cfrac%7B1%7D%7Bn%7D%20%5Cdisplaystyle%5Csum_%7Bi%5Cin%20I%7D%20%5Chat%7BV%7D_i%20%5Cleft(Y_i-%5Chat%7Bg%7D(X_i)%5Cright)"></li>
-<li>Construct the efficient, cross-fitting estimate: <img src="https://latex.codecogs.com/png.latex?%5Ccheck%7B%5Ctheta%7D_%7B%5Ctext%7Bcf%7D%7D%20=%20%5Cfrac%7B1%7D%7B2%7D%20%5Cleft%5B%5Ccheck%7B%5Ctheta%7D%5Cleft(I%5EC,I%5Cright)+%5Ccheck%7B%5Ctheta%7D%5Cleft(I,I%5EC%5Cright)%20%5Cright%5D"></li>
-</ol>
-</section>
-<section id="simulated-example" class="level3">
-<h3 class="anchored" data-anchor-id="simulated-example">Simulated example</h3>
-<p>This example was inspired by this <a href="https://www.r-bloggers.com/cross-fitting-double-machine-learning-estimator/">great post</a> by Gabriel Vasconcelos. To make it more exciting, I’ll use a slightly different functional form with <img src="https://latex.codecogs.com/png.latex?g"> as sine squared and <img src="https://latex.codecogs.com/png.latex?m"> as the wrapped Cauchy distribution:</p>
-<p><img src="https://latex.codecogs.com/png.latex?%0Ag(x)=%20%5Csin%5E2(x)%20%5C%5C%0Am(x;%5Cnu,%5Cgamma)=%20%5Cfrac%7B1%7D%7B2%5Cpi%7D%20%5Cfrac%7B%5Csinh(%5Cgamma)%7D%7B%5Ccosh(%5Cgamma)-%5Ccos(x-%5Cnu)%7D%0A"></p>
-<p>Let’s keep it simple and set <img src="https://latex.codecogs.com/png.latex?%5Cnu=0"> and <img src="https://latex.codecogs.com/png.latex?%5Cgamma=1">. The wrapped Cauchy looks like this:</p>
-<p><img src="https://aeturrell.github.io/markov-wanderer/posts/econometrics-in-python-parti-ml/DoubleMLCauchy.png" class="img-fluid" alt="The wrapped Cauchy distribution"><em>The wrapped Cauchy distribution</em></p>
-<p>Our model is</p>
-<p><img src="https://latex.codecogs.com/png.latex?%0Ay_i%20=%20d_i%5Ctheta%20+%20g(x_i'%5Ccdot%20b)%20+%20u_i,%20%5Cquad%20%5Cquad%20%20%5C%5C%0Ad_i%20=%20m(x_i'%5Ccdot%20b)%20+%20v_i%20%5Cquad%20%5Cquad%0A"></p>
-<p><img src="https://latex.codecogs.com/png.latex?x_i"> has length <img src="https://latex.codecogs.com/png.latex?K=10"> and will be generated from a multivariate normal distribution, the true value of the causal parameter will be <img src="https://latex.codecogs.com/png.latex?%5Ctheta=0.5">, and <img src="https://latex.codecogs.com/png.latex?b_k=1/k">. The errors will be</p>
-<p><img src="https://latex.codecogs.com/png.latex?%0Au_i,%20v_i%20%5Cthicksim%20%5Cmathcal%7BN%7D(0,1)%0A"></p>
-<p>and I’m going to use the <a href="http://scikit-learn.org/stable/index.html">scikit learn</a> implementation of the <a href="https://en.wikipedia.org/wiki/Random_forest">random forest regressor</a> to do the machine learning.</p>
-<p>Note that I’m using a scalar <img src="https://latex.codecogs.com/png.latex?D"> in the example below but, in the original paper, it’s a binary treatment - thanks to <a href="https://twitter.com/KyleCSN">Kyle Carlson</a> for pointing out that this could cause some confusion!</p>
-<p>The code, using Python 3, is</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> np</span>
-<span id="cb1-2"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> sklearn.datasets <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> make_spd_matrix</span>
-<span id="cb1-3"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> math</span>
-<span id="cb1-4"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> statsmodels.api <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">as</span> sm <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># for OLS</span></span>
-<span id="cb1-5"><span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">from</span> sklearn.ensemble <span class="im" style="color: #00769E;
-background-color: null;
-font-style: inherit;">import</span> RandomForestRegressor <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Our ML algorithm</span></span>
-<span id="cb1-6"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Set up the environment</span></span>
-<span id="cb1-7">randomseednumber <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">11022018</span></span>
-<span id="cb1-8">np.random.seed(randomseednumber)</span>
-<span id="cb1-9">N <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">500</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># No. obs</span></span>
-<span id="cb1-10">k<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># = No. variables in x_i</span></span>
-<span id="cb1-11">theta<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Structural parameter</span></span>
-<span id="cb1-12">b<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span>k <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> k <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>,<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">11</span>)] <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># x weights</span></span>
-<span id="cb1-13">sigma <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> make_spd_matrix(k,randomseednumber) <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#</span></span>
-<span id="cb1-14"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># NUmber of simulations</span></span>
-<span id="cb1-15">MC_no <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">500</span></span>
-<span id="cb1-16"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> g(x):</span>
-<span id="cb1-17">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> np.power(np.sin(x),<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span>
-<span id="cb1-18"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">def</span> m(x,nu<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.</span>,gamma<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.</span>):</span>
-<span id="cb1-19">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">return</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span>math.pi<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span>(np.sinh(gamma))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span>(np.cosh(gamma)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>np.cos(x<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>nu))</span>
-<span id="cb1-20"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Array of estimated thetas to store results</span></span>
-<span id="cb1-21">theta_est <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.zeros(shape<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[MC_no,<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>])</span>
-<span id="cb1-22"></span>
-<span id="cb1-23"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">range</span>(MC_no):</span>
-<span id="cb1-24">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Generate data: no. obs x no. variables in x_i</span></span>
-<span id="cb1-25">    X <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.random.multivariate_normal(np.ones(k),sigma,size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[N,])</span>
-<span id="cb1-26">    G <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> g(np.dot(X,b))</span>
-<span id="cb1-27">    M <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> m(np.dot(X,b))</span>
-<span id="cb1-28">    D <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> M<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span>np.random.standard_normal(size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">500</span>,])</span>
-<span id="cb1-29">    Y <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.dot(theta,D)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span>G<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span>np.random.standard_normal(size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">500</span>,])</span>
-<span id="cb1-30">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#</span></span>
-<span id="cb1-31">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Now run the different methods</span></span>
-<span id="cb1-32">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#</span></span>
-<span id="cb1-33">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># OLS --------------------------------------------------</span></span>
-<span id="cb1-34">    OLS <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> sm.OLS(Y,D)</span>
-<span id="cb1-35">    results <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> OLS.fit()</span>
-<span id="cb1-36">    theta_est[i][<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> results.params[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>]</span>
-<span id="cb1-37"></span>
-<span id="cb1-38">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Naive double machine Learning ------------------------</span></span>
-<span id="cb1-39">    naiveDMLg <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>RandomForestRegressor(max_depth<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span>
-<span id="cb1-40">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Compute ghat</span></span>
-<span id="cb1-41">    naiveDMLg.fit(X,Y)</span>
-<span id="cb1-42">    Ghat <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> naiveDMLg.predict(X)</span>
-<span id="cb1-43">    naiveDMLm <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span>RandomForestRegressor(max_depth<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span>
-<span id="cb1-44">    naiveDMLm.fit(X,D)</span>
-<span id="cb1-45">    Mhat <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> naiveDMLm.predict(X)</span>
-<span id="cb1-46">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># vhat as residual</span></span>
-<span id="cb1-47">    Vhat <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> D<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>Mhat</span>
-<span id="cb1-48">    theta_est[i][<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.mean(np.dot(Vhat,Y<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>Ghat))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span>np.mean(np.dot(Vhat,D))</span>
-<span id="cb1-49"></span>
-<span id="cb1-50">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#  Cross-fitting DML -----------------------------------</span></span>
-<span id="cb1-51">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Split the sample</span></span>
-<span id="cb1-52">    I <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.random.choice(N,np.<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">int</span>(N<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>),replace<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="va" style="color: #111111;
-background-color: null;
-font-style: inherit;">False</span>)</span>
-<span id="cb1-53">    I_C <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> [x <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> x <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> np.arange(N) <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> x <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">not</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> I]</span>
-<span id="cb1-54">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Ghat for both</span></span>
-<span id="cb1-55">    Ghat_1 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> RandomForestRegressor(max_depth<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>).fit(X[I],Y[I]).predict(X[I_C])</span>
-<span id="cb1-56">    Ghat_2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> RandomForestRegressor(max_depth<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>).fit(X[I_C],Y[I_C]).predict(X[I])</span>
-<span id="cb1-57">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Mhat and vhat for both</span></span>
-<span id="cb1-58">    Mhat_1 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> RandomForestRegressor(max_depth<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>).fit(X[I],D[I]).predict(X[I_C])</span>
-<span id="cb1-59">    Mhat_2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> RandomForestRegressor(max_depth<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>).fit(X[I_C],D[I_C]).predict(X[I])</span>
-<span id="cb1-60">    Vhat_1 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> D[I_C]<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>Mhat_1</span>
-<span id="cb1-61">    Vhat_2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> D[I] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> Mhat_2</span>
-<span id="cb1-62">    theta_1 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.mean(np.dot(Vhat_1,(Y[I_C]<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>Ghat_1)))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span>np.mean(np.dot(Vhat_1,D[I_C]))</span>
-<span id="cb1-63">    theta_2 <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> np.mean(np.dot(Vhat_2,(Y[I]<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>Ghat_2)))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span>np.mean(np.dot(Vhat_2,D[I]))</span>
-<span id="cb1-64">    theta_est[i][<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>] <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span>(theta_1<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span>theta_2)</span></code></pre></div>
-<p>Below is a plot of the kernel density estimates of <img src="https://latex.codecogs.com/png.latex?%5Ctheta"> using <a href="https://seaborn.pydata.org/">seaborn</a>. The peak of the distributions for OLS and double ML without cross-fitting are off the true value, but the cross-fitted double ML procedure gets much closer.</p>
-<p><img src="https://aeturrell.github.io/markov-wanderer/posts/econometrics-in-python-parti-ml/DoubleMLEsts.png" class="img-fluid" alt="The estimates of theta"><em>The estimates of <img src="https://latex.codecogs.com/png.latex?%5Ctheta"></em></p>
-<p>So there it is: double machine learning is a useful technique at the intersection of machine learning and econometrics which can produce approximately unbiased and normally distributed point estimates in semi-parametric settings.</p>
-
-
-</section>
-
- ]]></description>
-  <category>code</category>
-  <category>econometrics</category>
-  <category>python</category>
-  <guid>https://aeturrell.github.io/markov-wanderer/posts/econometrics-in-python-parti-ml/index.html</guid>
-  <pubDate>Sat, 10 Feb 2018 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
